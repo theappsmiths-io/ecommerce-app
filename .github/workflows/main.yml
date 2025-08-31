@@ -48,4 +48,4 @@ jobs:
         run: chmod +x gradlew
 
       - name: Build iOS Framework
-        run: ./gradlew :composeApp:linkIosSimulatorArm64MainDebugFramework
+        run: ./gradlew :shared:linkIosSimulatorArm64MainDebugFramework
