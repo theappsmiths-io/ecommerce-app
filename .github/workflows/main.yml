@@ -27,8 +27,11 @@ jobs:
       - name: Grant execute permission for gradlew
         run: chmod +x gradlew
 
-      - name: Build Android App
-        run: ./gradlew assembleDebug
+      - name: Run Android Unit Tests
+        run: ./gradlew test
+
+      - name: Build Android Release App
+        run: ./gradlew assembleRelease
 
   build-ios:
     name: Build iOS app
@@ -47,5 +50,8 @@ jobs:
       - name: Grant execute permission for gradlew
         run: chmod +x gradlew
 
+      - name: Run iOS Unit Tests
+        run: ./gradlew :composeApp:iosX64Test
+
       - name: Build iOS Framework
-        run: ./gradlew :composeApp:linkDebugFrameworkIosSimulatorArm64
+        run: ./gradlew :composeApp:linkReleaseFrameworkIosSimulatorArm64
