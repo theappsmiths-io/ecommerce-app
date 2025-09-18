@@ -45,9 +45,9 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavController
 import coil3.compose.AsyncImage
+import com.theappsmiths.designsystem.ui.theme.AppTheme
 import com.theappsmiths.ecommerce.domain.model.Product
 import com.theappsmiths.ecommerce.domain.model.Rating
-import com.theappsmiths.ecommerce.ui.theme.AppTheme
 import com.theappsmiths.ecommerce.util.formatToUsd
 import ecommerce.composeapp.generated.resources.Res
 import ecommerce.composeapp.generated.resources.add_to_cart

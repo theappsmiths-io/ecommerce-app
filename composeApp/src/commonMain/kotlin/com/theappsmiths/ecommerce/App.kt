@@ -11,11 +11,11 @@ import androidx.navigation.toRoute
 import coil3.ImageLoader
 import coil3.compose.setSingletonImageLoaderFactory
 import coil3.request.crossfade
+import com.theappsmiths.designsystem.ui.theme.AppTheme
 import com.theappsmiths.ecommerce.navigation.Route
 import com.theappsmiths.ecommerce.ui.productdetails.ProductDetailsScreen
 import com.theappsmiths.ecommerce.ui.productdetails.ProductDetailsViewModel
 import com.theappsmiths.ecommerce.ui.productlist.ProductListScreen
-import com.theappsmiths.ecommerce.ui.theme.AppTheme
 import org.jetbrains.compose.ui.tooling.preview.Preview
 import org.koin.compose.viewmodel.koinViewModel
 import org.koin.core.parameter.parametersOf

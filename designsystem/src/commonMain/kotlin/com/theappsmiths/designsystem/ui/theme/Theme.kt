@@ -1,4 +1,4 @@
-package com.theappsmiths.ecommerce.ui.theme
+package com.theappsmiths.designsystem.ui.theme
 import androidx.compose.material3.ExperimentalMaterial3ExpressiveApi
 import androidx.compose.material3.MaterialExpressiveTheme
 import androidx.compose.material3.lightColorScheme
