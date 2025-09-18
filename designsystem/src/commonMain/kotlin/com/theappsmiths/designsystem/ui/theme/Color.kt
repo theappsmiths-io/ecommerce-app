@@ -1,4 +1,4 @@
-package com.theappsmiths.ecommerce.ui.theme
+package com.theappsmiths.designsystem.ui.theme
 
 import androidx.compose.ui.graphics.Color
 
