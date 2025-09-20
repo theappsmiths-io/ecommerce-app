@@ -13,6 +13,7 @@ import coil3.compose.setSingletonImageLoaderFactory
 import coil3.request.crossfade
 import com.theappsmiths.designsystem.ui.theme.AppTheme
 import com.theappsmiths.ecommerce.navigation.Route
+import com.theappsmiths.ecommerce.ui.login.LoginScreen
 import com.theappsmiths.ecommerce.ui.productdetails.ProductDetailsScreen
 import com.theappsmiths.ecommerce.ui.productdetails.ProductDetailsViewModel
 import com.theappsmiths.ecommerce.ui.productlist.ProductListScreen
@@ -42,8 +43,12 @@ fun ECommerceApp() {
 
     NavHost(
         navController = navController,
-        startDestination = Route.ProductList,
+        startDestination = Route.Login,
     ) {
+        composable<Route.Login> {
+            LoginScreen(onLoginSuccess = { navController.navigate(Route.ProductList) })
+        }
+
         composable<Route.ProductList> {
             ProductListScreen(
                 scrollBehavior = scrollBehavior,
