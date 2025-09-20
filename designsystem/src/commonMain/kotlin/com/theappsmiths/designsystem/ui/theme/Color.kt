@@ -2,15 +2,15 @@ package com.theappsmiths.designsystem.ui.theme
 
 import androidx.compose.ui.graphics.Color
 
-val primaryLight = Color(0xFF000000)
+val primaryLight = Color(0xFF900036)
 val onPrimaryLight = Color(0xFFFFFFFF)
 val primaryContainerLight = Color(0xFFFAE287)
 val onPrimaryContainerLight = Color(0xFF544600)
-val secondaryLight = Color(0xFF4B662C)
+val secondaryLight = Color(0xFFD26E94)
 val onSecondaryLight = Color(0xFFFFFFFF)
 val secondaryContainerLight = Color(0xFFCCEDA4)
 val onSecondaryContainerLight = Color(0xFF344E16)
-val tertiaryLight = Color(0xFF44664D)
+val tertiaryLight = Color(0xFFFBCB00)
 val onTertiaryLight = Color(0xFFFFFFFF)
 val tertiaryContainerLight = Color(0xFFC6ECCD)
 val onTertiaryContainerLight = Color(0xFF2D4E37)

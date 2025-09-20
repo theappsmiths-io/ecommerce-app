@@ -25,7 +25,7 @@ import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.ExperimentalMaterial3ExpressiveApi
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
-import androidx.compose.material3.LoadingIndicator
+import androidx.compose.material3.LocalContentColor
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Scaffold
@@ -45,6 +45,7 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavController
 import coil3.compose.AsyncImage
+import com.theappsmiths.designsystem.ui.loadingindicator.FullscreenLoadingIndicator
 import com.theappsmiths.designsystem.ui.theme.AppTheme
 import com.theappsmiths.ecommerce.domain.model.Product
 import com.theappsmiths.ecommerce.domain.model.Rating
@@ -91,12 +92,7 @@ fun ProductDetailsScreen(
         }
     ) { innerPadding ->
         if (uiState.isLoading) {
-            Box(
-                modifier = modifier.fillMaxSize(),
-                contentAlignment = Alignment.Center,
-            ) {
-                LoadingIndicator()
-            }
+            FullscreenLoadingIndicator()
         } else {
             if (product != null) {
                 ProductDetailsScreen(
@@ -214,6 +210,7 @@ fun PriceActionsRow(
         IconButton(onClick = onFavoriteClick) {
             Icon(
                 imageVector = if (isFavorite) Icons.Filled.Favorite else Icons.Filled.FavoriteBorder,
+                tint = if (isFavorite) MaterialTheme.colorScheme.primary else LocalContentColor.current,
                 contentDescription = stringResource(Res.string.cd_favorite),
             )
         }
@@ -303,7 +300,7 @@ fun RatingSection(
                 Icon(
                     imageVector = starIcon,
                     contentDescription = null,
-                    tint = MaterialTheme.colorScheme.primary,
+                    tint = MaterialTheme.colorScheme.tertiary,
                     modifier = Modifier.size(24.dp)
                 )
             }
