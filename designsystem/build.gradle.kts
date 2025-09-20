@@ -11,6 +11,8 @@ kotlin {
         namespace = "com.theappsmiths.designsystem"
         compileSdk = 36
         minSdk = 24
+
+        androidResources.enable = true
     }
 
     iosX64()
