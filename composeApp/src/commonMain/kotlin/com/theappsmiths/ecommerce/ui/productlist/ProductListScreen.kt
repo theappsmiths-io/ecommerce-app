@@ -1,11 +1,6 @@
 package com.theappsmiths.ecommerce.ui.productlist
 
-import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -13,27 +8,21 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.ExperimentalMaterial3ExpressiveApi
-import androidx.compose.material3.LoadingIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBarScrollBehavior
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import coil3.compose.AsyncImage
+import com.theappsmiths.designsystem.ui.card.ItemCard
+import com.theappsmiths.designsystem.ui.loadingindicator.FullscreenLoadingIndicator
 import com.theappsmiths.ecommerce.domain.model.Product
 import com.theappsmiths.ecommerce.domain.model.Rating
 import com.theappsmiths.ecommerce.util.formatToUsd
@@ -60,12 +49,7 @@ fun ProductListScreen(
         }
     ) { innerPadding ->
         if (uiState.isLoading) {
-            Box(
-                modifier = Modifier.fillMaxSize(),
-                contentAlignment = Alignment.Center,
-            ) {
-                LoadingIndicator()
-            }
+            FullscreenLoadingIndicator()
         } else {
             ProductListScreen(
                 products = uiState.products,
@@ -113,16 +97,11 @@ fun ProductCard(
     product: Product,
     onProductClick: (productId: Int) -> Unit,
 ) {
-    Column(modifier = modifier.clickable { onProductClick(product.id) }) {
-        Box(
-            modifier = Modifier
-                .fillMaxWidth()
-                .background(
-                    color = Color.White,
-                    shape = RoundedCornerShape(16.dp)
-                )
-                .clip(RoundedCornerShape(16.dp))
-        ) {
+    ItemCard(
+        modifier = modifier,
+        title = product.title,
+        price = product.price.formatToUsd(),
+        imageContent = {
             AsyncImage(
                 model = product.image,
                 contentDescription = null,
@@ -130,22 +109,9 @@ fun ProductCard(
                     .height(160.dp),
                 contentScale = ContentScale.Fit,
             )
-        }
-        Spacer(modifier = Modifier.height(8.dp))
-        Text(
-            text = product.title,
-            style = MaterialTheme.typography.labelLarge,
-            fontWeight = FontWeight.Bold,
-            maxLines = 2,
-            overflow = TextOverflow.Ellipsis,
-        )
-        Spacer(modifier = Modifier.height(4.dp))
-        Text(
-            text = product.price.formatToUsd(),
-            style = MaterialTheme.typography.labelLarge,
-            fontWeight = FontWeight.Bold,
-        )
-    }
+        },
+        onCardClick = { onProductClick(product.id) }
+    )
 }
 
 @Preview
