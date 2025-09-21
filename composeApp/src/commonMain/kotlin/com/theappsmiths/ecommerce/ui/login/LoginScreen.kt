@@ -1,35 +1,44 @@
 package com.theappsmiths.ecommerce.ui.login
 
-import androidx.compose.foundation.background
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.IntrinsicSize
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.MaterialTheme
+import androidx.compose.foundation.layout.width
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.theappsmiths.designsystem.ui.field.InputFieldState
+import ecommerce.composeapp.generated.resources.Res
+import ecommerce.composeapp.generated.resources.app_name
+import ecommerce.composeapp.generated.resources.img_island_combo
+import org.jetbrains.compose.resources.painterResource
+import org.jetbrains.compose.resources.stringResource
 import org.koin.compose.viewmodel.koinViewModel
 
 @Composable
 fun LoginScreen(
     modifier: Modifier = Modifier,
-    loginViewModel: LoginViewModel = koinViewModel(),
+    viewModel: LoginViewModel = koinViewModel(),
     onLoginSuccess: () -> Unit,
+    onSignUpClick: () -> Unit,
 ) {
-    val loginUiState by loginViewModel.loginUiState.collectAsStateWithLifecycle()
-    val registrationUiState by loginViewModel.registrationUiState.collectAsStateWithLifecycle()
+    val loginUiState by viewModel.loginUiState.collectAsStateWithLifecycle()
+
     LoginScreen(
         modifier = modifier,
         emailInputFieldState = loginUiState.emailField,
         passwordInputFieldState = loginUiState.passwordField,
-        onLoginClicked = { _, _ -> },
+        onLoginClicked = { email, password -> viewModel.login(email, password) },
         onForgotPasswordClicked = {},
-        onRegisterClicked = { _, _ -> },
+        onSignUpClick = onSignUpClick,
     )
 }
 
@@ -40,22 +49,31 @@ fun LoginScreen(
     passwordInputFieldState: InputFieldState,
     onLoginClicked: (email: String, password: String) -> Unit,
     onForgotPasswordClicked: () -> Unit,
-    onRegisterClicked: (email: String, password: String) -> Unit,
+    onSignUpClick: () -> Unit,
 ) {
-    Scaffold { contentPadding ->
+    Scaffold(modifier = modifier) { contentPadding ->
         Column(
-            modifier = modifier
-                .fillMaxSize()
-                .background(MaterialTheme.colorScheme.surfaceContainerLowest)
-                .padding(contentPadding)
-                .padding(horizontal = 16.dp),
+            modifier = Modifier.padding(16.dp),
             horizontalAlignment = Alignment.CenterHorizontally,
         ) {
+            Spacer(modifier = Modifier.height(32.dp))
+            Image(
+                painter = painterResource(Res.drawable.img_island_combo),
+                contentDescription = stringResource(Res.string.app_name),
+                modifier = Modifier
+                    .height(160.dp)
+                    .width(IntrinsicSize.Min),
+                contentScale = ContentScale.Fit,
+            )
+
+            Spacer(modifier = Modifier.height(32.dp))
+
             LoginSection(
                 emailInputFieldState = emailInputFieldState,
                 passwordInputFieldState = passwordInputFieldState,
-                onLoginClicked = onLoginClicked,
-                onForgotPasswordClicked = onForgotPasswordClicked,
+                onLoginClick = onLoginClicked,
+                onForgotPasswordClick = onForgotPasswordClicked,
+                onSignUpClick = onSignUpClick,
             )
         }
     }

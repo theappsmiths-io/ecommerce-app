@@ -17,6 +17,7 @@ import com.theappsmiths.ecommerce.ui.login.LoginScreen
 import com.theappsmiths.ecommerce.ui.productdetails.ProductDetailsScreen
 import com.theappsmiths.ecommerce.ui.productdetails.ProductDetailsViewModel
 import com.theappsmiths.ecommerce.ui.productlist.ProductListScreen
+import com.theappsmiths.ecommerce.ui.signup.SignUpScreen
 import org.jetbrains.compose.ui.tooling.preview.Preview
 import org.koin.compose.viewmodel.koinViewModel
 import org.koin.core.parameter.parametersOf
@@ -46,7 +47,13 @@ fun ECommerceApp() {
         startDestination = Route.Login,
     ) {
         composable<Route.Login> {
-            LoginScreen(onLoginSuccess = { navController.navigate(Route.ProductList) })
+            LoginScreen(
+                onLoginSuccess = { navController.navigate(Route.ProductList) },
+                onSignUpClick = { navController.navigate(Route.SignUp) })
+        }
+
+        composable<Route.SignUp> {
+            SignUpScreen()
         }
 
         composable<Route.ProductList> {
