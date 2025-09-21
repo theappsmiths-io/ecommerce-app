@@ -13,4 +13,11 @@
 
     <string name="button_forgot_password">Forgot Password?</string>
     <string name="button_login">Login</string>
+
+    <string name="header_login">Login</string>
+    <string name="header_signup">Sign Up</string>
+    <string name="redirect_signup_text">Don’t have an account? Sign Up</string>
+    <string name="redirect_signup_highlight">Sign Up</string>
+
+    <string name="label_login_divider">Or</string>
 </resources>
