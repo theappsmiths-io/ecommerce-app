@@ -1,11 +1,11 @@
 package com.theappsmiths.ecommerce.domain.repository
 
 import com.theappsmiths.ecommerce.domain.model.LoginResult
-import com.theappsmiths.ecommerce.domain.model.RegistrationResult
+import com.theappsmiths.ecommerce.domain.model.SignUpResult
 
-interface LoginRepository {
+interface OnboardingRepository {
 
     suspend fun login(email: String, password: String): LoginResult
 
-    suspend fun register(email: String, password: String): RegistrationResult
+    suspend fun signUp(email: String, password: String): SignUpResult
 }

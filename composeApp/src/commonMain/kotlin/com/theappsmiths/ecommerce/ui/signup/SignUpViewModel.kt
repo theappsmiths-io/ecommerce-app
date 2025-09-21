@@ -1,4 +1,4 @@
-package com.theappsmiths.ecommerce.ui.login
+package com.theappsmiths.ecommerce.ui.signup
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -9,21 +9,21 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
-class LoginViewModel(private val onboardingRepository: OnboardingRepository) : ViewModel() {
+class SignUpViewModel(private val onboardingRepository: OnboardingRepository) : ViewModel() {
 
-    private val _loginUiState = MutableStateFlow(LoginUiState())
-    val loginUiState: StateFlow<LoginUiState> = _loginUiState.asStateFlow()
+    private val _signUpUiState = MutableStateFlow(SignUpUiState())
+    val signUpUiState: StateFlow<SignUpUiState> = _signUpUiState.asStateFlow()
 
-    fun login(email: String, password: String) {
+    fun signUp(email: String, password: String) {
         viewModelScope.launch {
-            _loginUiState.update { currentState ->
+            _signUpUiState.update { currentState ->
                 currentState.copy(isLoading = true)
             }
-            val loginResult = onboardingRepository.login(email, password)
-            _loginUiState.update { currentState ->
+            val signUpResult = onboardingRepository.signUp(email, password)
+            _signUpUiState.update { currentState ->
                 currentState.copy(
                     isLoading = false,
-                    loginResult = loginResult,
+                    signUpResult = signUpResult,
                 )
             }
         }

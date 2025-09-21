@@ -16,13 +16,10 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import ecommerce.designsystem.generated.resources.Res
-import ecommerce.designsystem.generated.resources.login_apple
-import ecommerce.designsystem.generated.resources.login_google
 import ecommerce.designsystem.generated.resources.logo_apple
 import ecommerce.designsystem.generated.resources.logo_google
 import org.jetbrains.compose.resources.DrawableResource
 import org.jetbrains.compose.resources.painterResource
-import org.jetbrains.compose.resources.stringResource
 
 @OptIn(ExperimentalMaterial3ExpressiveApi::class)
 val mediumSize = ButtonDefaults.MediumContainerHeight
@@ -58,7 +55,8 @@ fun LogoButton(
 }
 
 @Composable
-fun GoogleLoginButton(
+fun GoogleButton(
+    buttonText: String,
     modifier: Modifier = Modifier,
     isEnabled: Boolean = true,
     onClick: () -> Unit,
@@ -67,13 +65,14 @@ fun GoogleLoginButton(
         modifier = modifier,
         isEnabled = isEnabled,
         logoResourceId = Res.drawable.logo_google,
-        buttonText = stringResource(Res.string.login_google),
+        buttonText = buttonText,
         onClick = onClick,
     )
 }
 
 @Composable
-fun AppleLoginButton(
+fun AppleButton(
+    buttonText: String,
     modifier: Modifier = Modifier,
     isEnabled: Boolean = true,
     onClick: () -> Unit,
@@ -82,7 +81,7 @@ fun AppleLoginButton(
         modifier = modifier,
         isEnabled = isEnabled,
         logoResourceId = Res.drawable.logo_apple,
-        buttonText = stringResource(Res.string.login_apple),
+        buttonText = buttonText,
         onClick = onClick,
     )
 }
