@@ -36,7 +36,7 @@ fun LoginScreen(
         modifier = modifier,
         emailInputFieldState = loginUiState.emailField,
         passwordInputFieldState = loginUiState.passwordField,
-        onLoginClicked = { email, password -> viewModel.login(email, password) },
+        onLoginClick = { email, password -> viewModel.login(email, password) },
         onForgotPasswordClicked = {},
         onSignUpClick = onSignUpClick,
     )
@@ -47,7 +47,7 @@ fun LoginScreen(
     modifier: Modifier = Modifier,
     emailInputFieldState: InputFieldState,
     passwordInputFieldState: InputFieldState,
-    onLoginClicked: (email: String, password: String) -> Unit,
+    onLoginClick: (email: String, password: String) -> Unit,
     onForgotPasswordClicked: () -> Unit,
     onSignUpClick: () -> Unit,
 ) {
@@ -71,7 +71,7 @@ fun LoginScreen(
             LoginSection(
                 emailInputFieldState = emailInputFieldState,
                 passwordInputFieldState = passwordInputFieldState,
-                onLoginClick = onLoginClicked,
+                onLoginClick = onLoginClick,
                 onForgotPasswordClick = onForgotPasswordClicked,
                 onSignUpClick = onSignUpClick,
             )

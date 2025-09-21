@@ -53,7 +53,16 @@ fun ECommerceApp() {
         }
 
         composable<Route.SignUp> {
-            SignUpScreen()
+            SignUpScreen(
+                onSignUpSuccess = {},
+                onNavigateToLogin = {
+                    navController.navigate(Route.Login) {
+                        popUpTo<Route.SignUp> {
+                            inclusive = true
+                        }
+                    }
+                },
+            )
         }
 
         composable<Route.ProductList> {
