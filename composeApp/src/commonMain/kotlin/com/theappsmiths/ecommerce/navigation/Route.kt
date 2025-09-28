@@ -11,6 +11,9 @@ sealed class Route {
     data object SignUp : Route()
 
     @Serializable
+    data object VerifyOtp : Route()
+
+    @Serializable
     data object ProductList : Route()
 
     @Serializable

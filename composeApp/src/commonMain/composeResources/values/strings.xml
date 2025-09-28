@@ -14,6 +14,8 @@
     <string name="button_forgot_password">Forgot Password?</string>
     <string name="button_login">Login</string>
     <string name="button_signup">Sign Up</string>
+    <string name="button_verify_otp">Verify OTP</string>
+    <string name="button_resend_otp">Resend OTP in 0:%1$s</string>
 
     <string name="header_login">Login</string>
     <string name="header_signup">Sign Up</string>
@@ -34,5 +36,8 @@
 
     <string name="signup_google">Sign up with Google</string>
     <string name="signup_apple">Sign up with Apple</string>
+
+    <string name="verify_email_enter_code">Enter your verification code</string>
+    <string name="verify_email_description">We’ve sent a one-time password (OTP) to %1$s</string>
 
 </resources>

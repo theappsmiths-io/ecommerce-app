@@ -13,6 +13,7 @@ import coil3.compose.setSingletonImageLoaderFactory
 import coil3.request.crossfade
 import com.theappsmiths.designsystem.ui.theme.AppTheme
 import com.theappsmiths.ecommerce.navigation.Route
+import com.theappsmiths.ecommerce.ui.emailverification.verifyotp.VerifyOtpScreen
 import com.theappsmiths.ecommerce.ui.login.LoginScreen
 import com.theappsmiths.ecommerce.ui.productdetails.ProductDetailsScreen
 import com.theappsmiths.ecommerce.ui.productdetails.ProductDetailsViewModel
@@ -63,6 +64,9 @@ fun ECommerceApp() {
                     }
                 },
             )
+        }
+        composable<Route.VerifyOtp> {
+            VerifyOtpScreen(navController = navController)
         }
 
         composable<Route.ProductList> {
