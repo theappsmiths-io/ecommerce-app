@@ -4,7 +4,6 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
-import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.ExperimentalMaterial3ExpressiveApi
 import androidx.compose.material3.MaterialTheme
@@ -19,7 +18,7 @@ import androidx.compose.ui.unit.dp
 import com.theappsmiths.designsystem.ui.button.AppleButton
 import com.theappsmiths.designsystem.ui.button.GoogleButton
 import com.theappsmiths.designsystem.ui.button.HighlightTextButton
-import com.theappsmiths.designsystem.ui.button.mediumSize
+import com.theappsmiths.designsystem.ui.button.LoadingButton
 import com.theappsmiths.designsystem.ui.divider.TextDivider
 import com.theappsmiths.designsystem.ui.field.EmailTextField
 import com.theappsmiths.designsystem.ui.field.InputFieldState
@@ -43,6 +42,7 @@ import org.jetbrains.compose.ui.tooling.preview.Preview
 @Composable
 fun LoginSection(
     modifier: Modifier = Modifier,
+    isLoading: Boolean,
     emailInputFieldState: InputFieldState,
     passwordInputFieldState: InputFieldState,
     onLoginClick: (email: String, password: String) -> Unit,
@@ -93,22 +93,18 @@ fun LoginSection(
         }
         Spacer(modifier = Modifier.height(16.dp))
 
-        Button(
-            enabled = areInputsValid,
-            contentPadding = ButtonDefaults.contentPaddingFor(mediumSize),
+        LoadingButton(
+            isLoading = isLoading,
+            areInputsValid = areInputsValid,
+            buttonLabel = stringResource(Res.string.button_login),
             onClick = {
                 onLoginClick(
                     emailInputFieldState.textFieldState.text.toString(),
                     passwordInputFieldState.textFieldState.text.toString(),
                 )
-            },
-            modifier = Modifier.fillMaxWidth()
-        ) {
-            Text(
-                stringResource(Res.string.button_login),
-                style = MaterialTheme.typography.labelLarge,
-            )
-        }
+            }
+
+        )
 
         Spacer(modifier = Modifier.height(16.dp))
 
@@ -138,6 +134,7 @@ fun LoginSectionPreview() {
     AppTheme {
         Surface {
             LoginSection(
+                isLoading = false,
                 emailInputFieldState = InputFieldState(validator = emailStateValidator),
                 passwordInputFieldState = InputFieldState(validator = passwordStateValidator),
                 onLoginClick = { _, _ -> },
