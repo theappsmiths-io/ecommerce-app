@@ -40,4 +40,10 @@
     <string name="verify_email_enter_code">Enter your verification code</string>
     <string name="verify_email_description">We’ve sent a one-time password (OTP) to %1$s</string>
 
+    <string name="dialog_invalid_credentials">Invalid Credentials</string>
+    <string name="dialog_check_credentials">Please check your email and password and try again</string>
+
+    <string name="dialog_network_error">Network Error</string>
+    <string name="dialog_check_network">Please check your internet connection and try again</string>
+
 </resources>
