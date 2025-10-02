@@ -1,7 +1,6 @@
 package com.theappsmiths.designsystem.ui.card
 
 import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -17,6 +16,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
+import com.theappsmiths.designsystem.ui.common.debounceClickable
 
 @Composable
 fun ItemCard(
@@ -26,7 +26,7 @@ fun ItemCard(
     imageContent: @Composable () -> Unit,
     onCardClick: () -> Unit,
 ) {
-    Column(modifier = modifier.clickable { onCardClick() }) {
+    Column(modifier = modifier.debounceClickable { onCardClick() }) {
         Box(
             modifier = Modifier
                 .fillMaxWidth()

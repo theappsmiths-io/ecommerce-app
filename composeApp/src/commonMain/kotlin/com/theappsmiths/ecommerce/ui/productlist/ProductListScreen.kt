@@ -22,6 +22,7 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import coil3.compose.AsyncImage
 import com.theappsmiths.designsystem.ui.card.ItemCard
+import com.theappsmiths.designsystem.ui.common.rememberThrottledClickHandler
 import com.theappsmiths.designsystem.ui.loadingindicator.FullscreenLoadingIndicator
 import com.theappsmiths.ecommerce.domain.model.Product
 import com.theappsmiths.ecommerce.domain.model.Rating
@@ -38,6 +39,12 @@ fun ProductListScreen(
     onProductClick: (productId: Int) -> Unit,
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
+    //This is added to prevent simultaneous clicks on product items
+    val throttledClickHandler = rememberThrottledClickHandler<Int>(
+        onClick = { productId ->
+            onProductClick(productId)
+        }
+    )
 
     Scaffold(
         modifier = Modifier.nestedScroll(scrollBehavior.nestedScrollConnection),
@@ -54,7 +61,9 @@ fun ProductListScreen(
             ProductListScreen(
                 products = uiState.products,
                 modifier = modifier.padding(innerPadding).padding(horizontal = 16.dp),
-                onProductClick = onProductClick,
+                onProductClick = { productId ->
+                    throttledClickHandler(productId)
+                },
             )
         }
     }
