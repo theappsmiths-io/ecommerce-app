@@ -15,6 +15,7 @@ import com.theappsmiths.designsystem.ui.theme.AppTheme
 import com.theappsmiths.ecommerce.navigation.Route
 import com.theappsmiths.ecommerce.ui.emailverification.verifyotp.VerifyOtpScreen
 import com.theappsmiths.ecommerce.ui.login.LoginScreen
+import com.theappsmiths.ecommerce.ui.main.MainContainerScreen
 import com.theappsmiths.ecommerce.ui.productdetails.ProductDetailsScreen
 import com.theappsmiths.ecommerce.ui.productdetails.ProductDetailsViewModel
 import com.theappsmiths.ecommerce.ui.productlist.ProductListScreen
@@ -67,6 +68,10 @@ fun ECommerceApp() {
         }
         composable<Route.VerifyOtp> {
             VerifyOtpScreen(navController = navController)
+        }
+
+        composable<Route.MainContainer> {
+            MainContainerScreen()
         }
 
         composable<Route.ProductList> {
