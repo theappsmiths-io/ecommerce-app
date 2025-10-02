@@ -60,7 +60,9 @@ fun LoginScreen(
                 dialogTextResId = Res.string.dialog_check_network
                 showDialog = true
             }
-            null -> { /* Do nothing */ }
+
+            null -> { /* Do nothing */
+            }
         }
         viewModel.loginEventConsumed()
     }
@@ -96,7 +98,9 @@ fun LoginScreen(
 ) {
     Scaffold(modifier = modifier) { contentPadding ->
         Column(
-            modifier = Modifier.padding(16.dp),
+            modifier = Modifier
+                .padding(contentPadding)
+                .padding(horizontal = 16.dp),
             horizontalAlignment = Alignment.CenterHorizontally,
         ) {
             Spacer(modifier = Modifier.height(32.dp))
