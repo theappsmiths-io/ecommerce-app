@@ -1,5 +1,6 @@
 package com.theappsmiths.ecommerce.ui.main
 
+import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.NavigationBar
@@ -64,6 +65,7 @@ fun MainContainerScreen(modifier: Modifier = Modifier) {
         }
     ) { contentPadding ->
         NavHost(
+            modifier = Modifier.padding(contentPadding),
             navController = navController,
             startDestination = Route.Home,
         ) {
