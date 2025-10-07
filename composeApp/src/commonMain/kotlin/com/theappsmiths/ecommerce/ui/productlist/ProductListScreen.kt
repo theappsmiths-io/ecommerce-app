@@ -21,7 +21,7 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import coil3.compose.AsyncImage
-import com.theappsmiths.designsystem.ui.card.ItemCard
+import com.theappsmiths.designsystem.ui.item.ItemCard
 import com.theappsmiths.designsystem.ui.common.rememberThrottledClickHandler
 import com.theappsmiths.designsystem.ui.loadingindicator.FullscreenLoadingIndicator
 import com.theappsmiths.ecommerce.domain.model.Product

@@ -20,6 +20,9 @@
     <string name="header_login">Login</string>
     <string name="header_signup">Sign Up</string>
 
+    <string name="header_categories">Categories</string>
+    <string name="header_navigation_label">View all</string>
+
     <string name="redirect_signup_text">Don’t have an account? Sign Up</string>
     <string name="redirect_signup_highlight">Sign Up</string>
     <string name="redirect_login_text">Already have an account? Log in</string>

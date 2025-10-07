@@ -27,7 +27,7 @@ import org.jetbrains.compose.resources.DrawableResource
 import org.jetbrains.compose.resources.painterResource
 
 @Composable
-fun BannerSpotlight(modifier: Modifier = Modifier, banners: List<DrawableResource>) {
+fun BannerHorizontalPager(modifier: Modifier = Modifier, banners: List<DrawableResource>) {
     val pagerState = rememberPagerState(pageCount = {
         banners.size
     })
