@@ -12,7 +12,8 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.ExperimentalMaterial3ExpressiveApi
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
-import androidx.compose.material3.TopAppBarScrollBehavior
+import androidx.compose.material3.TopAppBarDefaults
+import androidx.compose.material3.rememberTopAppBarState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
@@ -21,8 +22,8 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import coil3.compose.AsyncImage
-import com.theappsmiths.designsystem.ui.item.ItemCard
 import com.theappsmiths.designsystem.ui.common.rememberThrottledClickHandler
+import com.theappsmiths.designsystem.ui.item.ItemCard
 import com.theappsmiths.designsystem.ui.loadingindicator.FullscreenLoadingIndicator
 import com.theappsmiths.ecommerce.domain.model.Product
 import com.theappsmiths.ecommerce.domain.model.Rating
@@ -35,7 +36,6 @@ import org.koin.compose.viewmodel.koinViewModel
 fun ProductListScreen(
     viewModel: ProductListViewModel = koinViewModel(),
     modifier: Modifier = Modifier,
-    scrollBehavior: TopAppBarScrollBehavior,
     onProductClick: (productId: Int) -> Unit,
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
@@ -45,6 +45,8 @@ fun ProductListScreen(
             onProductClick(productId)
         }
     )
+    val scrollBehavior =
+        TopAppBarDefaults.enterAlwaysScrollBehavior(rememberTopAppBarState())
 
     Scaffold(
         modifier = Modifier.nestedScroll(scrollBehavior.nestedScrollConnection),
