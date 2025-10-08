@@ -18,13 +18,19 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
+import androidx.navigation.toRoute
 import com.theappsmiths.ecommerce.navigation.Route
 import com.theappsmiths.ecommerce.navigation.TopLevelRoute
 import com.theappsmiths.ecommerce.ui.main.cart.CartScreen
 import com.theappsmiths.ecommerce.ui.main.category.CategoryScreen
 import com.theappsmiths.ecommerce.ui.main.favorite.FavoriteScreen
-import com.theappsmiths.ecommerce.ui.main.home.HomeScreen
+import com.theappsmiths.ecommerce.ui.main.home.HomeScreenRoute
 import com.theappsmiths.ecommerce.ui.main.profile.ProfileScreen
+import com.theappsmiths.ecommerce.ui.productdetails.ProductDetailsScreen
+import com.theappsmiths.ecommerce.ui.productdetails.ProductDetailsViewModel
+import com.theappsmiths.ecommerce.ui.productlist.ProductListScreen
+import org.koin.compose.viewmodel.koinViewModel
+import org.koin.core.parameter.parametersOf
 
 @Composable
 fun MainContainerScreen(modifier: Modifier = Modifier) {
@@ -70,7 +76,20 @@ fun MainContainerScreen(modifier: Modifier = Modifier) {
             startDestination = Route.Home,
         ) {
             composable<Route.Home> {
-                HomeScreen()
+                HomeScreenRoute(
+                    onCategoryClick = { id ->
+                        navController.navigate(Route.Category)
+                    },
+                    onProductClick = { id ->
+                        navController.navigate(Route.ProductDetails(id))
+                    },
+                    onViewAllCategories = {
+                        navController.navigate(Route.Category)
+                    },
+                    onViewAllTopSelling = {
+                        navController.navigate(Route.ProductList)
+                    },
+                )
             }
             composable<Route.Category> {
                 CategoryScreen()
@@ -83,6 +102,20 @@ fun MainContainerScreen(modifier: Modifier = Modifier) {
             }
             composable<Route.Profile> {
                 ProfileScreen()
+            }
+            composable<Route.ProductList> {
+                ProductListScreen(
+                    onProductClick = { id ->
+                        navController.navigate(Route.ProductDetails(id))
+                    }
+                )
+            }
+            composable<Route.ProductDetails> { backStackEntry ->
+                val productId = backStackEntry.toRoute<Route.ProductDetails>().id
+                val productDetailsViewModel: ProductDetailsViewModel = koinViewModel {
+                    parametersOf(productId)
+                }
+                ProductDetailsScreen(viewModel = productDetailsViewModel, navController = navController)
             }
         }
     }
