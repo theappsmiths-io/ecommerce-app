@@ -9,6 +9,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.theappsmiths.designsystem.ui.common.rememberThrottledClickHandler
 import com.theappsmiths.designsystem.ui.pager.BannerHorizontalPager
 import com.theappsmiths.ecommerce.domain.model.Category
 import com.theappsmiths.ecommerce.domain.model.Product
@@ -27,12 +28,19 @@ fun HomeScreenRoute(
     onViewAllTopSelling: () -> Unit,
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
+    val throttledClickHandler = rememberThrottledClickHandler<Int>(
+        onClick = { productId ->
+            onProductClick(productId)
+        }
+    )
     HomeScreen(
         modifier = modifier,
         categories = uiState.categories,
         topSellingProducts = uiState.topSellingProducts,
         onCategoryClick = onCategoryClick,
-        onProductClick = onProductClick,
+        onProductClick = { productId ->
+            throttledClickHandler(productId)
+        },
         onViewAllCategories = onViewAllCategories,
         onViewAllTopSelling = onViewAllTopSelling,
     )

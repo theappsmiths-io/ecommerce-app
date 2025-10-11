@@ -11,9 +11,11 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
+import androidx.navigation.NavDestination
 import androidx.navigation.NavDestination.Companion.hasRoute
 import androidx.navigation.NavDestination.Companion.hierarchy
 import androidx.navigation.NavGraph.Companion.findStartDestination
+import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
@@ -29,6 +31,7 @@ import com.theappsmiths.ecommerce.ui.main.profile.ProfileScreen
 import com.theappsmiths.ecommerce.ui.productdetails.ProductDetailsScreen
 import com.theappsmiths.ecommerce.ui.productdetails.ProductDetailsViewModel
 import com.theappsmiths.ecommerce.ui.productlist.ProductListScreen
+import com.theappsmiths.ecommerce.ui.productlist.ProductListType
 import org.koin.compose.viewmodel.koinViewModel
 import org.koin.core.parameter.parametersOf
 
@@ -40,43 +43,20 @@ fun MainContainerScreen(modifier: Modifier = Modifier) {
         bottomBar = {
             val navBackStackEntry by navController.currentBackStackEntryAsState()
             val currentDestination = navBackStackEntry?.destination
-            NavigationBar(windowInsets = NavigationBarDefaults.windowInsets) {
-                TopLevelRoute.entries.forEachIndexed { index, destination ->
-                    NavigationBarItem(
-                        selected = currentDestination?.hierarchy?.any { it.hasRoute(destination.route::class) } == true,
-                        onClick = {
-                            navController.navigate(destination.route) {
-                                popUpTo(navController.graph.findStartDestination().id) {
-                                    saveState = true
-                                }
-                                launchSingleTop = true
-                                restoreState = true
-                            }
-                        },
-                        icon = {
-                            Icon(
-                                destination.icon,
-                                contentDescription = destination.label,
-                            )
-                        },
-                        label = {
-                            Text(
-                                text = destination.label,
-                                style = MaterialTheme.typography.labelMedium,
-                            )
-                        }
-                    )
-                }
+            val topLevelRoutes = TopLevelRoute.entries.map { it.route::class }
+
+            if (currentDestination != null && topLevelRoutes.any { currentDestination.hasRoute(it) }) {
+                MainNavigationBar(navController = navController, currentDestination = currentDestination)
             }
         }
     ) { contentPadding ->
         NavHost(
-            modifier = Modifier.padding(contentPadding),
             navController = navController,
             startDestination = Route.Home,
         ) {
             composable<Route.Home> {
                 HomeScreenRoute(
+                    modifier = Modifier.padding(contentPadding),
                     onCategoryClick = { id ->
                         navController.navigate(Route.Category)
                     },
@@ -87,24 +67,28 @@ fun MainContainerScreen(modifier: Modifier = Modifier) {
                         navController.navigate(Route.Category)
                     },
                     onViewAllTopSelling = {
-                        navController.navigate(Route.ProductList)
+                        navController.navigate(Route.ProductList(ProductListType.TOP_SELLING.toString()))
                     },
                 )
             }
             composable<Route.Category> {
-                CategoryScreen()
+                CategoryScreen(modifier = Modifier.padding(contentPadding))
             }
             composable<Route.Cart> {
-                CartScreen()
+                CartScreen(modifier = Modifier.padding(contentPadding))
             }
             composable<Route.Favorite> {
-                FavoriteScreen()
+                FavoriteScreen(modifier = Modifier.padding(contentPadding))
             }
             composable<Route.Profile> {
-                ProfileScreen()
+                ProfileScreen(modifier = Modifier.padding(contentPadding))
             }
-            composable<Route.ProductList> {
+            composable<Route.ProductList> { backStackEntry ->
+                val productListRoute = backStackEntry.toRoute<Route.ProductList>()
+                val productListType = ProductListType.valueOf(productListRoute.productListType)
                 ProductListScreen(
+                    navController = navController,
+                    productListType = productListType,
                     onProductClick = { id ->
                         navController.navigate(Route.ProductDetails(id))
                     }
@@ -117,6 +101,38 @@ fun MainContainerScreen(modifier: Modifier = Modifier) {
                 }
                 ProductDetailsScreen(viewModel = productDetailsViewModel, navController = navController)
             }
+        }
+    }
+}
+
+@Composable
+fun MainNavigationBar(navController: NavHostController, currentDestination: NavDestination) {
+    NavigationBar(windowInsets = NavigationBarDefaults.windowInsets) {
+        TopLevelRoute.entries.forEachIndexed { index, destination ->
+            NavigationBarItem(
+                selected = currentDestination.hierarchy.any { it.hasRoute(destination.route::class) },
+                onClick = {
+                    navController.navigate(destination.route) {
+                        popUpTo(navController.graph.findStartDestination().id) {
+                            saveState = true
+                        }
+                        launchSingleTop = true
+                        restoreState = true
+                    }
+                },
+                icon = {
+                    Icon(
+                        destination.icon,
+                        contentDescription = destination.label,
+                    )
+                },
+                label = {
+                    Text(
+                        text = destination.label,
+                        style = MaterialTheme.typography.labelMedium,
+                    )
+                }
+            )
         }
     }
 }
