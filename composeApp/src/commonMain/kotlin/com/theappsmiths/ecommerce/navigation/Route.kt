@@ -34,7 +34,7 @@ sealed class Route {
     data object Profile : Route()
 
     @Serializable
-    data object ProductList : Route()
+    data class ProductList(val productListType: String) : Route()
 
     @Serializable
     data class ProductDetails(val id: Int): Route()

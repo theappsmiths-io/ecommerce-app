@@ -21,6 +21,7 @@ import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import androidx.navigation.NavController
 import coil3.compose.AsyncImage
 import com.theappsmiths.designsystem.ui.common.rememberThrottledClickHandler
 import com.theappsmiths.designsystem.ui.item.ItemCard
@@ -34,8 +35,10 @@ import org.koin.compose.viewmodel.koinViewModel
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalMaterial3ExpressiveApi::class)
 @Composable
 fun ProductListScreen(
-    viewModel: ProductListViewModel = koinViewModel(),
     modifier: Modifier = Modifier,
+    navController: NavController,
+    viewModel: ProductListViewModel = koinViewModel(),
+    productListType: ProductListType,
     onProductClick: (productId: Int) -> Unit,
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
@@ -53,6 +56,9 @@ fun ProductListScreen(
         containerColor = MaterialTheme.colorScheme.surface,
         topBar = {
             ProductListAppBar(
+                title = productListType.title,
+                canNavigateBack = navController.previousBackStackEntry != null,
+                onNavigateUp = { navController.navigateUp() },
                 scrollBehavior = scrollBehavior,
             )
         }

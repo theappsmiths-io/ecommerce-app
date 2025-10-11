@@ -40,7 +40,13 @@ fun ECommerceApp() {
     ) {
         composable<Route.Login> {
             LoginScreen(
-                onLoginSuccess = { navController.navigate(Route.MainContainer) },
+                onLoginSuccess = {
+                    navController.navigate(Route.MainContainer) {
+                        popUpTo<Route.Login> {
+                            inclusive = true
+                        }
+                    }
+                },
                 onSignUpClick = { navController.navigate(Route.SignUp) })
         }
 

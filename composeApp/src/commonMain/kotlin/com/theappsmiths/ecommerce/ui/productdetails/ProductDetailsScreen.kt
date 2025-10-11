@@ -68,7 +68,7 @@ import org.jetbrains.compose.ui.tooling.preview.Preview
 fun ProductDetailsScreen(
     modifier: Modifier = Modifier,
     viewModel: ProductDetailsViewModel,
-    navController: NavController
+    navController: NavController,
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
     val product = uiState.product
