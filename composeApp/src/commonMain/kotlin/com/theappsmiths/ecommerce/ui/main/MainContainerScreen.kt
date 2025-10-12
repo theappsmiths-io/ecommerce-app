@@ -1,16 +1,29 @@
 package com.theappsmiths.ecommerce.ui.main
 
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
+import androidx.compose.animation.slideInVertically
+import androidx.compose.animation.slideOutVertically
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.windowInsetsPadding
+import androidx.compose.foundation.text.input.rememberTextFieldState
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.NavigationBar
 import androidx.compose.material3.NavigationBarDefaults
 import androidx.compose.material3.NavigationBarItem
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.SearchBar
 import androidx.compose.material3.Text
+import androidx.compose.material3.TopAppBarDefaults
+import androidx.compose.material3.rememberSearchBarState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.unit.dp
 import androidx.navigation.NavDestination
 import androidx.navigation.NavDestination.Companion.hasRoute
 import androidx.navigation.NavDestination.Companion.hierarchy
@@ -21,6 +34,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.toRoute
+import com.theappsmiths.designsystem.ui.searchbar.SearchBarInputField
 import com.theappsmiths.ecommerce.navigation.Route
 import com.theappsmiths.ecommerce.navigation.TopLevelRoute
 import com.theappsmiths.ecommerce.ui.main.cart.CartScreen
@@ -35,18 +49,52 @@ import com.theappsmiths.ecommerce.ui.productlist.ProductListType
 import org.koin.compose.viewmodel.koinViewModel
 import org.koin.core.parameter.parametersOf
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun MainContainerScreen(modifier: Modifier = Modifier) {
     val navController = rememberNavController()
+    val searchBarState = rememberSearchBarState()
+    val textFieldState = rememberTextFieldState()
+    val scope = rememberCoroutineScope()
     Scaffold(
         modifier = modifier,
+        topBar = {
+            val navBackStackEntry by navController.currentBackStackEntryAsState()
+            val currentDestination = navBackStackEntry?.destination
+
+            AnimatedVisibility(
+                visible = isTopLevelScreen(currentDestination),
+                enter = fadeIn() + slideInVertically(initialOffsetY = { -it }),
+                exit = fadeOut() + slideOutVertically(targetOffsetY = { -it }),
+            ) {
+                SearchBar(
+                    modifier = Modifier.padding(16.dp)
+                        .windowInsetsPadding(TopAppBarDefaults.windowInsets),
+                    state = searchBarState,
+                    inputField = {
+                        SearchBarInputField(
+                            textFieldState = textFieldState,
+                            searchBarState = searchBarState,
+                            scope = scope,
+                            onSearch = {},
+                        )
+                    }
+                )
+            }
+        },
         bottomBar = {
             val navBackStackEntry by navController.currentBackStackEntryAsState()
             val currentDestination = navBackStackEntry?.destination
-            val topLevelRoutes = TopLevelRoute.entries.map { it.route::class }
 
-            if (currentDestination != null && topLevelRoutes.any { currentDestination.hasRoute(it) }) {
-                MainNavigationBar(navController = navController, currentDestination = currentDestination)
+            AnimatedVisibility(
+                visible = isTopLevelScreen(currentDestination),
+                enter = fadeIn() + slideInVertically(initialOffsetY = { +it }),
+                exit = fadeOut() + slideOutVertically(targetOffsetY = { +it }),
+            ) {
+                MainNavigationBar(
+                    navController = navController,
+                    currentDestination = currentDestination
+                )
             }
         }
     ) { contentPadding ->
@@ -64,7 +112,7 @@ fun MainContainerScreen(modifier: Modifier = Modifier) {
                         navController.navigate(Route.ProductDetails(id))
                     },
                     onViewAllCategories = {
-                        navController.navigate(Route.Category)
+                        navController.navigateToTopLevel(Route.Category)
                     },
                     onViewAllTopSelling = {
                         navController.navigate(Route.ProductList(ProductListType.TOP_SELLING.toString()))
@@ -99,30 +147,27 @@ fun MainContainerScreen(modifier: Modifier = Modifier) {
                 val productDetailsViewModel: ProductDetailsViewModel = koinViewModel {
                     parametersOf(productId)
                 }
-                ProductDetailsScreen(viewModel = productDetailsViewModel, navController = navController)
+                ProductDetailsScreen(
+                    viewModel = productDetailsViewModel,
+                    navController = navController
+                )
             }
         }
     }
 }
 
 @Composable
-fun MainNavigationBar(navController: NavHostController, currentDestination: NavDestination) {
+fun MainNavigationBar(navController: NavHostController, currentDestination: NavDestination?) {
     NavigationBar(windowInsets = NavigationBarDefaults.windowInsets) {
         TopLevelRoute.entries.forEachIndexed { index, destination ->
             NavigationBarItem(
-                selected = currentDestination.hierarchy.any { it.hasRoute(destination.route::class) },
+                selected = currentDestination?.hierarchy?.any { it.hasRoute(destination.route::class) } == true,
                 onClick = {
-                    navController.navigate(destination.route) {
-                        popUpTo(navController.graph.findStartDestination().id) {
-                            saveState = true
-                        }
-                        launchSingleTop = true
-                        restoreState = true
-                    }
+                    navController.navigateToTopLevel(destination.route)
                 },
                 icon = {
                     Icon(
-                        destination.icon,
+                        imageVector = destination.icon,
                         contentDescription = destination.label,
                     )
                 },
@@ -134,5 +179,20 @@ fun MainNavigationBar(navController: NavHostController, currentDestination: NavD
                 }
             )
         }
+    }
+}
+
+private fun isTopLevelScreen(currentDestination: NavDestination?): Boolean {
+    val topLevelRoutes = TopLevelRoute.entries.map { it.route::class }
+    return currentDestination != null && topLevelRoutes.any { currentDestination.hasRoute(it) }
+}
+
+fun NavHostController.navigateToTopLevel(route: Route) {
+    navigate(route) {
+        popUpTo(graph.findStartDestination().id) {
+            saveState = true
+        }
+        launchSingleTop = true
+        restoreState = true
     }
 }

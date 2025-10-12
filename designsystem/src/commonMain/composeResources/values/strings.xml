@@ -1,11 +1,13 @@
 <resources>
     <string name="hint_email">Email</string>
     <string name="hint_password">Password</string>
+    <string name="hint_search">Search</string>
     <string name="error_email_empty">Please enter your email</string>
     <string name="error_email_invalid">Email is invalid</string>
     <string name="error_password_empty">Please enter your password</string>
     <string name="error_password_invalid">Incorrect password. Please try again</string>
     <string name="cd_toggle_password_visibility">Toggle password visibility</string>
+    <string name="cd_back">Back</string>
     <string name="login_google">Login with Google</string>
     <string name="login_apple">Login with Apple</string>
     <string name="button_dialog_okay">Okay</string>

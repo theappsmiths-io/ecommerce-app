@@ -1,5 +1,6 @@
 package com.theappsmiths.ecommerce.ui.productlist
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -122,7 +123,9 @@ fun ProductCard(
             AsyncImage(
                 model = product.image,
                 contentDescription = null,
-                modifier = Modifier.fillMaxWidth()
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .background(MaterialTheme.colorScheme.surfaceContainer)
                     .height(160.dp),
                 contentScale = ContentScale.Fit,
             )
