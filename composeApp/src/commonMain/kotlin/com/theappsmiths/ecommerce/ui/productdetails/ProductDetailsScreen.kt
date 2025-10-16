@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.rememberScrollState
@@ -84,8 +85,7 @@ fun ProductDetailsScreen(
         },
         bottomBar = {
             ActionButtonsRow(
-                modifier = Modifier
-                    .fillMaxWidth(),
+                modifier = Modifier.fillMaxWidth(),
                 onAddToCartClick = { /*trigger add to cart action*/ },
                 onBuyNowClick = { /*trigger buy now action*/ },
             )
@@ -229,7 +229,10 @@ fun ActionButtonsRow(
         shadowElevation = 8.dp,
     ) {
         Row(
-            modifier = Modifier.padding(16.dp),
+            modifier = Modifier
+                .padding(16.dp)
+                .navigationBarsPadding()
+                .fillMaxWidth(),
             horizontalArrangement = Arrangement.spacedBy(8.dp)
         ) {
             OutlinedButton(

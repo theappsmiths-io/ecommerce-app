@@ -7,4 +7,6 @@ interface HomeRepository {
     fun getCategories(): List<Category>
 
     fun getTopSellingProducts(): List<Product>
+
+    fun getForYouProducts(): List<Product>
 }

@@ -9,4 +9,5 @@ data class HomeUiState(
     val banners: List<DrawableResource> = emptyList(),
     val categories: List<Category> = emptyList(),
     val topSellingProducts: List<Product> = emptyList(),
+    val forYouProducts: List<Product> = emptyList(),
 )
