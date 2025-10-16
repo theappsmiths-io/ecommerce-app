@@ -12,7 +12,7 @@ class FakeOnboardingRepositoryImpl : OnboardingRepository {
         email: String,
         password: String
     ): Result<Unit, LoginError> {
-        delay(3000)
+        delay(2000)
         return when {
             fakeUsers.any { it.email == email && it.password == password } -> Result.Success(Unit)
             else -> Result.Error(error = LoginError.InvalidCredentials)

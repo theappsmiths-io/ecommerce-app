@@ -39,7 +39,7 @@ fun TopSellingSection(
         Spacer(modifier = Modifier.height(16.dp))
 
         LazyRow(
-            modifier = Modifier.fillMaxWidth().padding(vertical = 8.dp),
+            modifier = Modifier.fillMaxWidth(),
             contentPadding = PaddingValues(horizontal = 16.dp),
             horizontalArrangement = Arrangement.spacedBy(8.dp),
         ) {

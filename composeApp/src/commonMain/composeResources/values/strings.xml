@@ -25,6 +25,7 @@
 
     <string name="header_categories">Categories</string>
     <string name="header_top_selling">Top selling</string>
+    <string name="header_just_for_you">Just for you</string>
     <string name="header_navigation_label">View all</string>
 
     <string name="redirect_signup_text">Don’t have an account? Sign Up</string>

@@ -1,4 +1,4 @@
-package com.theappsmiths.ecommerce.ui.main.category
+package com.theappsmiths.ecommerce.ui.main.home
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -41,7 +41,7 @@ fun CategorySection(
         Spacer(modifier = Modifier.height(16.dp))
 
         LazyRow(
-            modifier = Modifier.fillMaxWidth().padding(vertical = 8.dp),
+            modifier = Modifier.fillMaxWidth(),
             contentPadding = PaddingValues(horizontal = 16.dp),
             horizontalArrangement = Arrangement.spacedBy(8.dp),
         ) {
