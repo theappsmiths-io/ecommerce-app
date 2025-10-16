@@ -17,6 +17,7 @@ class HomeViewModel(val homeRepository: HomeRepository) : ViewModel() {
     init {
         getCategories()
         getTopSellingProducts()
+        getForYouProducts()
     }
 
     fun getCategories() {
@@ -32,6 +33,14 @@ class HomeViewModel(val homeRepository: HomeRepository) : ViewModel() {
             _uiState.update { it.copy(isLoading = true) }
             val products = homeRepository.getTopSellingProducts()
             _uiState.update { it.copy(topSellingProducts = products, isLoading = false) }
+        }
+    }
+
+    fun getForYouProducts() {
+        viewModelScope.launch {
+            _uiState.update { it.copy(isLoading = true) }
+            val products = homeRepository.getForYouProducts()
+            _uiState.update { it.copy(forYouProducts = products, isLoading = false) }
         }
     }
 }

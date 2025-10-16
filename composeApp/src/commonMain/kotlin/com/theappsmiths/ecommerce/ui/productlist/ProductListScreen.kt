@@ -103,7 +103,9 @@ fun ProductGridList(
         horizontalArrangement = Arrangement.spacedBy(16.dp),
         verticalArrangement = Arrangement.spacedBy(16.dp)
     ) {
-        items(products) { product ->
+        items(
+            items = products,
+            key = { product -> product.id }) { product ->
             ProductCard(product = product, onProductClick = onProductClick)
         }
     }
