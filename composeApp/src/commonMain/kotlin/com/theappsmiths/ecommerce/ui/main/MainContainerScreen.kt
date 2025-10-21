@@ -1,6 +1,12 @@
+@file:OptIn(ExperimentalSharedTransitionApi::class)
+
 package com.theappsmiths.ecommerce.ui.main
 
 import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.AnimatedVisibilityScope
+import androidx.compose.animation.ExperimentalSharedTransitionApi
+import androidx.compose.animation.SharedTransitionLayout
+import androidx.compose.animation.SharedTransitionScope
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.animation.slideInVertically
@@ -20,6 +26,8 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.rememberSearchBarState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.CompositionLocalProvider
+import androidx.compose.runtime.compositionLocalOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
@@ -48,6 +56,9 @@ import com.theappsmiths.ecommerce.ui.productlist.ProductListScreen
 import com.theappsmiths.ecommerce.ui.productlist.ProductListType
 import org.koin.compose.viewmodel.koinViewModel
 import org.koin.core.parameter.parametersOf
+
+val LocalAnimatedVisibilityScope = compositionLocalOf<AnimatedVisibilityScope?> { null }
+val LocalSharedTransitionScope = compositionLocalOf<SharedTransitionScope?> { null }
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -98,59 +109,71 @@ fun MainContainerScreen(modifier: Modifier = Modifier) {
             }
         }
     ) { contentPadding ->
-        NavHost(
-            navController = navController,
-            startDestination = Route.Home,
-        ) {
-            composable<Route.Home> {
-                HomeScreenRoute(
-                    modifier = Modifier.padding(contentPadding),
-                    onCategoryClick = { id ->
-                        navController.navigate(Route.Category)
-                    },
-                    onProductClick = { id ->
-                        navController.navigate(Route.ProductDetails(id))
-                    },
-                    onViewAllCategories = {
-                        navController.navigateToTopLevel(Route.Category)
-                    },
-                    onViewAllTopSelling = {
-                        navController.navigate(Route.ProductList(ProductListType.TOP_SELLING.toString()))
-                    },
-                )
-            }
-            composable<Route.Category> {
-                CategoryScreen(modifier = Modifier.padding(contentPadding))
-            }
-            composable<Route.Cart> {
-                CartScreen(modifier = Modifier.padding(contentPadding))
-            }
-            composable<Route.Favorite> {
-                FavoriteScreen(modifier = Modifier.padding(contentPadding))
-            }
-            composable<Route.Profile> {
-                ProfileScreen(modifier = Modifier.padding(contentPadding))
-            }
-            composable<Route.ProductList> { backStackEntry ->
-                val productListRoute = backStackEntry.toRoute<Route.ProductList>()
-                val productListType = ProductListType.valueOf(productListRoute.productListType)
-                ProductListScreen(
+        SharedTransitionLayout {
+            CompositionLocalProvider(LocalSharedTransitionScope provides this) {
+                NavHost(
                     navController = navController,
-                    productListType = productListType,
-                    onProductClick = { id ->
-                        navController.navigate(Route.ProductDetails(id))
+                    startDestination = Route.Home,
+                ) {
+                    composable<Route.Home> {
+                        CompositionLocalProvider(LocalAnimatedVisibilityScope provides this) {
+                            HomeScreenRoute(
+                                modifier = Modifier.padding(contentPadding),
+                                onCategoryClick = { id ->
+                                    navController.navigate(Route.Category)
+                                },
+                                onProductClick = { id ->
+                                    navController.navigate(Route.ProductDetails(id))
+                                },
+                                onViewAllCategories = {
+                                    navController.navigateToTopLevel(Route.Category)
+                                },
+                                onViewAllTopSelling = {
+                                    navController.navigate(Route.ProductList(ProductListType.TOP_SELLING.toString()))
+                                },
+                            )
+                        }
                     }
-                )
-            }
-            composable<Route.ProductDetails> { backStackEntry ->
-                val productId = backStackEntry.toRoute<Route.ProductDetails>().id
-                val productDetailsViewModel: ProductDetailsViewModel = koinViewModel {
-                    parametersOf(productId)
+                    composable<Route.Category> {
+                        CategoryScreen(modifier = Modifier.padding(contentPadding))
+                    }
+                    composable<Route.Cart> {
+                        CartScreen(modifier = Modifier.padding(contentPadding))
+                    }
+                    composable<Route.Favorite> {
+                        FavoriteScreen(modifier = Modifier.padding(contentPadding))
+                    }
+                    composable<Route.Profile> {
+                        ProfileScreen(modifier = Modifier.padding(contentPadding))
+                    }
+                    composable<Route.ProductList> { backStackEntry ->
+                        val productListRoute = backStackEntry.toRoute<Route.ProductList>()
+                        val productListType = ProductListType.valueOf(productListRoute.productListType)
+
+                        CompositionLocalProvider(LocalAnimatedVisibilityScope provides this) {
+                            ProductListScreen(
+                                navController = navController,
+                                productListType = productListType,
+                                onProductClick = { id ->
+                                    navController.navigate(Route.ProductDetails(id))
+                                }
+                            )
+                        }
+                    }
+                    composable<Route.ProductDetails> { backStackEntry ->
+                        val productId = backStackEntry.toRoute<Route.ProductDetails>().id
+                        val productDetailsViewModel: ProductDetailsViewModel = koinViewModel {
+                            parametersOf(productId)
+                        }
+                        CompositionLocalProvider(LocalAnimatedVisibilityScope provides this) {
+                            ProductDetailsScreen(
+                                productId = productId,
+                                viewModel = productDetailsViewModel,
+                                navController = navController
+                            )
+                        }
+                    }
                 }
-                ProductDetailsScreen(
-                    viewModel = productDetailsViewModel,
-                    navController = navController
-                )
             }
         }
     }

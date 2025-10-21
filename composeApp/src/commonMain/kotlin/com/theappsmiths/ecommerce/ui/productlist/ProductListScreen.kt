@@ -1,5 +1,9 @@
 package com.theappsmiths.ecommerce.ui.productlist
 
+import androidx.compose.animation.ExperimentalSharedTransitionApi
+import androidx.compose.animation.SharedTransitionScope
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.fillMaxSize
@@ -29,6 +33,8 @@ import com.theappsmiths.designsystem.ui.item.ItemCard
 import com.theappsmiths.designsystem.ui.loadingindicator.FullscreenLoadingIndicator
 import com.theappsmiths.ecommerce.domain.model.Product
 import com.theappsmiths.ecommerce.domain.model.Rating
+import com.theappsmiths.ecommerce.ui.main.LocalAnimatedVisibilityScope
+import com.theappsmiths.ecommerce.ui.main.LocalSharedTransitionScope
 import com.theappsmiths.ecommerce.util.formatToUsd
 import org.jetbrains.compose.ui.tooling.preview.Preview
 import org.koin.compose.viewmodel.koinViewModel
@@ -111,29 +117,44 @@ fun ProductGridList(
     }
 }
 
+@OptIn(ExperimentalSharedTransitionApi::class)
 @Composable
 fun ProductCard(
     modifier: Modifier = Modifier,
     product: Product,
     onProductClick: (productId: Int) -> Unit,
 ) {
-    ItemCard(
-        modifier = modifier,
-        title = product.title,
-        price = product.price.formatToUsd(),
-        imageContent = {
-            AsyncImage(
-                model = product.image,
-                contentDescription = null,
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .background(MaterialTheme.colorScheme.surfaceContainer)
-                    .height(160.dp),
-                contentScale = ContentScale.Fit,
-            )
-        },
-        onCardClick = { onProductClick(product.id) }
-    )
+    val sharedTransitionScope = LocalSharedTransitionScope.current
+        ?: throw IllegalStateException("No SharedElementScope found")
+    val animatedVisibilityScope = LocalAnimatedVisibilityScope.current
+        ?: throw IllegalStateException("No SharedElementScope found")
+
+    with(sharedTransitionScope) {
+        ItemCard(
+            modifier = modifier
+                .sharedBounds(
+                    sharedContentState = rememberSharedContentState(key = product.id),
+                    animatedVisibilityScope = animatedVisibilityScope,
+                    enter = fadeIn(),
+                    exit = fadeOut(),
+                    resizeMode = SharedTransitionScope.ResizeMode.ScaleToBounds()
+                ),
+            title = product.title,
+            price = product.price.formatToUsd(),
+            imageContent = {
+                AsyncImage(
+                    model = product.image,
+                    contentDescription = null,
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .background(MaterialTheme.colorScheme.surfaceContainer)
+                        .height(160.dp),
+                    contentScale = ContentScale.Fit,
+                )
+            },
+            onCardClick = { onProductClick(product.id) }
+        )
+    }
 }
 
 @Preview
