@@ -1,5 +1,9 @@
 package com.theappsmiths.ecommerce.ui.productdetails
 
+import androidx.compose.animation.ExperimentalSharedTransitionApi
+import androidx.compose.animation.SharedTransitionScope
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -8,7 +12,6 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.rememberScrollState
@@ -21,14 +24,11 @@ import androidx.compose.material.icons.filled.FavoriteBorder
 import androidx.compose.material.icons.filled.Star
 import androidx.compose.material.icons.outlined.Share
 import androidx.compose.material.icons.outlined.StarOutline
-import androidx.compose.material3.Button
-import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.ExperimentalMaterial3ExpressiveApi
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.LocalContentColor
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
@@ -50,72 +50,76 @@ import com.theappsmiths.designsystem.ui.loadingindicator.FullscreenLoadingIndica
 import com.theappsmiths.designsystem.ui.theme.AppTheme
 import com.theappsmiths.ecommerce.domain.model.Product
 import com.theappsmiths.ecommerce.domain.model.Rating
+import com.theappsmiths.ecommerce.ui.main.LocalAnimatedVisibilityScope
+import com.theappsmiths.ecommerce.ui.main.LocalSharedTransitionScope
 import com.theappsmiths.ecommerce.util.formatToUsd
 import ecommerce.composeapp.generated.resources.Res
-import ecommerce.composeapp.generated.resources.add_to_cart
-import ecommerce.composeapp.generated.resources.buy_now
 import ecommerce.composeapp.generated.resources.cd_favorite
 import ecommerce.composeapp.generated.resources.cd_share_product
 import ecommerce.composeapp.generated.resources.header_product_details
-import ecommerce.composeapp.generated.resources.product_not_found
 import ecommerce.composeapp.generated.resources.rating_count
 import ecommerce.composeapp.generated.resources.rating_display
 import org.jetbrains.compose.resources.ExperimentalResourceApi
 import org.jetbrains.compose.resources.stringResource
 import org.jetbrains.compose.ui.tooling.preview.Preview
 
-@OptIn(ExperimentalMaterial3ExpressiveApi::class)
+@OptIn(ExperimentalMaterial3ExpressiveApi::class, ExperimentalSharedTransitionApi::class)
 @Composable
 fun ProductDetailsScreen(
     modifier: Modifier = Modifier,
+    productId: Int,
     viewModel: ProductDetailsViewModel,
     navController: NavController,
 ) {
+    val sharedTransitionScope = LocalSharedTransitionScope.current
+        ?: throw IllegalStateException("No SharedElementScope found")
+    val animatedVisibilityScope = LocalAnimatedVisibilityScope.current
+        ?: throw IllegalStateException("No SharedElementScope found")
+
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
     val product = uiState.product
 
-    Scaffold(
-        containerColor = MaterialTheme.colorScheme.surface,
-        topBar = {
-            ProductDetailsAppBar(
-                canNavigateBack = navController.previousBackStackEntry != null,
-                onNavigateUp = { navController.navigateUp() },
-                onCartClick = {},
-            )
-        },
-        bottomBar = {
-            ActionButtonsRow(
-                modifier = Modifier.fillMaxWidth(),
-                onAddToCartClick = { /*trigger add to cart action*/ },
-                onBuyNowClick = { /*trigger buy now action*/ },
-            )
-        }
-    ) { innerPadding ->
-        if (uiState.isLoading) {
-            FullscreenLoadingIndicator()
-        } else {
-            if (product != null) {
-                ProductDetailsScreen(
-                    modifier = modifier
-                        .padding(innerPadding),
-                    product = product,
-                    onShareClick = { /*trigger share action*/ },
-                    onRatingsClick = { /*trigger ratings action*/ }
+    with(sharedTransitionScope) {
+        Scaffold(
+            modifier = Modifier.sharedBounds(
+                sharedContentState = rememberSharedContentState(key = productId),
+                animatedVisibilityScope = animatedVisibilityScope,
+                enter = fadeIn(),
+                exit = fadeOut(),
+                resizeMode = SharedTransitionScope.ResizeMode.ScaleToBounds()
+            ),
+            containerColor = MaterialTheme.colorScheme.surface,
+            topBar = {
+                ProductDetailsAppBar(
+                    canNavigateBack = navController.previousBackStackEntry != null,
+                    onNavigateUp = { navController.navigateUp() },
+                    onCartClick = {},
                 )
+            },
+            bottomBar = {
+                ProductDetailsBottomBar(
+                    modifier = Modifier.fillMaxWidth(),
+                    onAddToCartClick = { /*trigger add to cart action*/ },
+                    onBuyNowClick = { /*trigger buy now action*/ },
+                )
+            }
+        ) { innerPadding ->
+            if (uiState.isLoading) {
+                FullscreenLoadingIndicator()
             } else {
-                ProductNotFound()
+                if (product != null) {
+                    ProductDetailsScreen(
+                        modifier = modifier
+                            .padding(innerPadding),
+                        product = product,
+                        onShareClick = { /*trigger share action*/ },
+                        onRatingsClick = { /*trigger ratings action*/ }
+                    )
+                } else {
+                    ProductNotFound()
+                }
             }
         }
-    }
-}
-
-@Composable
-fun ProductNotFound() {
-    Box(
-        modifier = Modifier.fillMaxSize(),
-        contentAlignment = Alignment.Center,
-    ) {
-        Text(text = stringResource(Res.string.product_not_found))
     }
 }
 
@@ -130,7 +134,9 @@ fun ProductDetailsScreen(
 
     Box(modifier = modifier.fillMaxSize()) {
         Column(
-            modifier = Modifier.verticalScroll(rememberScrollState()).padding(horizontal = 16.dp)
+            modifier = Modifier
+                .verticalScroll(rememberScrollState())
+                .padding(horizontal = 16.dp)
         ) {
             AsyncImage(
                 model = product.image,
@@ -213,45 +219,6 @@ fun PriceActionsRow(
                 tint = if (isFavorite) MaterialTheme.colorScheme.primary else LocalContentColor.current,
                 contentDescription = stringResource(Res.string.cd_favorite),
             )
-        }
-    }
-}
-
-@OptIn(ExperimentalResourceApi::class, ExperimentalMaterial3ExpressiveApi::class)
-@Composable
-fun ActionButtonsRow(
-    modifier: Modifier = Modifier,
-    onAddToCartClick: () -> Unit,
-    onBuyNowClick: () -> Unit,
-) {
-    Surface(
-        modifier = modifier.fillMaxWidth(),
-        shadowElevation = 8.dp,
-    ) {
-        Row(
-            modifier = Modifier
-                .padding(16.dp)
-                .navigationBarsPadding()
-                .fillMaxWidth(),
-            horizontalArrangement = Arrangement.spacedBy(8.dp)
-        ) {
-            OutlinedButton(
-                onClick = onAddToCartClick,
-                modifier = Modifier.weight(1f),
-                shape = ButtonDefaults.squareShape,
-                contentPadding = ButtonDefaults.contentPaddingFor(ButtonDefaults.MediumContainerHeight),
-            ) {
-                Text(stringResource(Res.string.add_to_cart))
-            }
-
-            Button(
-                onClick = onBuyNowClick,
-                modifier = Modifier.weight(1f),
-                shape = ButtonDefaults.squareShape,
-                contentPadding = ButtonDefaults.contentPaddingFor(ButtonDefaults.MediumContainerHeight),
-            ) {
-                Text(stringResource(Res.string.buy_now))
-            }
         }
     }
 }
