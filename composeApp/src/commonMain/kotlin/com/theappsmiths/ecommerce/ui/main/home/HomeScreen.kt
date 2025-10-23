@@ -20,7 +20,7 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.theappsmiths.designsystem.ui.common.rememberThrottledClickHandler
 import com.theappsmiths.designsystem.ui.pager.BannerHorizontalPager
-import com.theappsmiths.ecommerce.domain.model.Category
+import com.theappsmiths.ecommerce.domain.model.MainCategory
 import com.theappsmiths.ecommerce.domain.model.Product
 import com.theappsmiths.ecommerce.ui.productlist.ProductCard
 import ecommerce.composeapp.generated.resources.Res
@@ -33,7 +33,7 @@ import org.koin.compose.viewmodel.koinViewModel
 fun HomeScreenRoute(
     viewModel: HomeViewModel = koinViewModel(),
     modifier: Modifier = Modifier,
-    onCategoryClick: (categoryId: Int) -> Unit,
+    onCategoryClick: (categoryId: String) -> Unit,
     onProductClick: (productId: Int) -> Unit,
     onViewAllCategories: () -> Unit,
     onViewAllTopSelling: () -> Unit,
@@ -61,10 +61,11 @@ fun HomeScreenRoute(
 @Composable
 fun HomeScreen(
     modifier: Modifier = Modifier,
-    categories: List<Category>,
+    categories: List<MainCategory>,
     topSellingProducts: List<Product>,
     forYouProducts: List<Product>,
-    onCategoryClick: (categoryId: Int) -> Unit,onProductClick: (productId: Int) -> Unit,
+    onCategoryClick: (categoryId: String) -> Unit,
+    onProductClick: (productId: Int) -> Unit,
     onViewAllCategories: () -> Unit,
     onViewAllTopSelling: () -> Unit,
 ) {
@@ -93,12 +94,12 @@ fun HomeScreen(
             )
         }
 
-         item {
-             TopSellingSection(
-                 products = topSellingProducts,
-                 onProductClick = onProductClick,
-                 onViewAllTopSelling = onViewAllTopSelling,
-             )
+        item {
+            TopSellingSection(
+                products = topSellingProducts,
+                onProductClick = onProductClick,
+                onViewAllTopSelling = onViewAllTopSelling,
+            )
         }
 
         item {
