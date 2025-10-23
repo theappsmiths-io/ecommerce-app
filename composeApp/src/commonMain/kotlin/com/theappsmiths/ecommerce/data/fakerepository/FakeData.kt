@@ -1,8 +1,9 @@
 package com.theappsmiths.ecommerce.data.fakerepository
 
-import com.theappsmiths.ecommerce.domain.model.Category
+import com.theappsmiths.ecommerce.domain.model.MainCategory
 import com.theappsmiths.ecommerce.domain.model.Product
 import com.theappsmiths.ecommerce.domain.model.Rating
+import com.theappsmiths.ecommerce.domain.model.SubCategory
 import com.theappsmiths.ecommerce.domain.model.UserAccount
 
 object FakeData {
@@ -10,13 +11,64 @@ object FakeData {
         UserAccount("demo@demo.com", "demo")
     )
 
-    val fakeCategories = listOf(
-        Category(1, "Household & Cleaning", "https://picsum.photos/id/237/200/200"),
-        Category(2, "Health & Wellness", "https://picsum.photos/id/123/200/200"),
-        Category(3, "Fashion & Apparel", "https://picsum.photos/id/21/200/200"),
-        Category(4, "Jewelry & Collections", "https://picsum.photos/id/219/200/200"),
-        Category(5, "Bags & Accessories", "https://picsum.photos/id/3/200/200"),
-        Category(6, "Furniture & Home", "https://picsum.photos/id/65/200/200"),
+    val allSubCategories: List<SubCategory> = listOf(
+        //women
+        SubCategory(id = "sub_w_dresses", name = "Dresses", mainCategoryId = "women"),
+        SubCategory(id = "sub_w_tops", name = "Tops & Blouses", mainCategoryId = "women"),
+        SubCategory(id = "sub_w_jeans", name = "Jeans & Skirts", mainCategoryId = "women"),
+        SubCategory(id = "sub_w_sneakers", name = "Sneakers", mainCategoryId = "women"),
+        SubCategory(id = "sub_w_bags", name = "Handbags & Totes", mainCategoryId = "women"),
+
+        //men
+        SubCategory(id = "sub_m_shirts", name = "Shirts (Casual)", mainCategoryId = "men"),
+        SubCategory(id = "sub_m_pants", name = "Pants & Chinos", mainCategoryId = "men"),
+        SubCategory(id = "sub_m_formal_shoes", name = "Formal Shoes", mainCategoryId = "men"),
+        SubCategory(id = "sub_m_watches", name = "Watches", mainCategoryId = "men"),
+
+        //beauty
+        SubCategory(id = "sub_b_skincare", name = "Skincare", mainCategoryId = "beauty"),
+        SubCategory(id = "sub_b_makeup", name = "Makeup", mainCategoryId = "beauty"),
+
+        //sport
+        SubCategory(id = "sub_s_activewear", name = "Activewear Tops", mainCategoryId = "sport"),
+        SubCategory(id = "sub_s_runshoes", name = "Running Shoes", mainCategoryId = "sport")
+    )
+
+    val fakeCategories: List<MainCategory> = listOf(
+        MainCategory(
+            id = "women",
+            name = "Women",
+            imageUrl = "https://picsum.photos/id/65/200/200",
+            subCategories = allSubCategories.filter { it.mainCategoryId == "women" }
+        ),
+        MainCategory(
+            id = "men",
+            name = "Men",
+            imageUrl = "https://picsum.photos/id/447/200/200",
+            subCategories = allSubCategories.filter { it.mainCategoryId == "men" }
+        ),
+        MainCategory(
+            id = "beauty",
+            name = "Beauty",
+            imageUrl = "https://picsum.photos/id/21/200/200",
+            subCategories = allSubCategories.filter { it.mainCategoryId == "beauty" }
+        ),
+        MainCategory(
+            id = "sport",
+            name = "Sport",
+            imageUrl = "https://picsum.photos/id/157/200/200",
+            subCategories = allSubCategories.filter { it.mainCategoryId == "sport" }
+        ),
+        MainCategory(
+            id = "gadgets",
+            name = "Gadgets",
+            imageUrl = "https://picsum.photos/id/0/200/200",
+        ),
+        MainCategory(
+            id = "home",
+            name = "Furniture & Home",
+            imageUrl = "https://picsum.photos/id/42/200/200",
+        ),
     )
 
     val fakeProductList = listOf(

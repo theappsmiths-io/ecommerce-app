@@ -17,7 +17,7 @@ import androidx.compose.ui.unit.dp
 import coil3.compose.AsyncImage
 import com.theappsmiths.designsystem.ui.header.HeaderWithNavigation
 import com.theappsmiths.designsystem.ui.item.CircleItem
-import com.theappsmiths.ecommerce.domain.model.Category
+import com.theappsmiths.ecommerce.domain.model.MainCategory
 import ecommerce.composeapp.generated.resources.Res
 import ecommerce.composeapp.generated.resources.header_categories
 import ecommerce.composeapp.generated.resources.header_navigation_label
@@ -26,8 +26,8 @@ import org.jetbrains.compose.resources.stringResource
 @Composable
 fun CategorySection(
     modifier: Modifier = Modifier,
-    categories: List<Category>,
-    onCategoryClick: (categoryId: Int) -> Unit,
+    categories: List<MainCategory>,
+    onCategoryClick: (categoryId: String) -> Unit,
     onViewAllCategories: () -> Unit,
 ) {
     Column(modifier = modifier.fillMaxWidth()) {
