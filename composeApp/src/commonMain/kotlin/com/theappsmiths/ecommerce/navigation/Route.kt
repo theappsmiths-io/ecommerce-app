@@ -22,7 +22,7 @@ sealed class Route {
     data object Home : Route()
 
     @Serializable
-    data object Category : Route()
+    data class Category(val selectedCategory: String? = null) : Route()
 
     @Serializable
     data object Cart : Route()

@@ -9,19 +9,33 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
-class CategoryViewModel(private val categoryRepository: CategoryRepository) : ViewModel() {
+class CategoryViewModel(
+    selectedCategoryId: String?,
+    private val categoryRepository: CategoryRepository
+) : ViewModel() {
+
     private val _uiState = MutableStateFlow(CategoryUiState())
     val uiState: StateFlow<CategoryUiState> = _uiState.asStateFlow()
 
     init {
-        getCategories()
+        getCategories(selectedCategoryId)
     }
 
-    private fun getCategories() {
+    private fun getCategories(selectedCategory: String?) {
         viewModelScope.launch {
             _uiState.update { it.copy(isLoading = true) }
             val categories = categoryRepository.getCategories()
-            _uiState.update { it.copy(categories = categories, isLoading = false) }
+            _uiState.update {
+                it.copy(
+                    categories = categories,
+                    isLoading = false,
+                    selectedCategoryId = selectedCategory,
+                )
+            }
         }
+    }
+
+    fun onCategorySelected(categoryId: String?) {
+        _uiState.update { it.copy(selectedCategoryId = categoryId) }
     }
 }

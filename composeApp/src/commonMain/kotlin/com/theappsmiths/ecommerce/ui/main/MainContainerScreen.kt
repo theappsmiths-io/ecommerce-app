@@ -47,6 +47,7 @@ import com.theappsmiths.ecommerce.navigation.Route
 import com.theappsmiths.ecommerce.navigation.TopLevelRoute
 import com.theappsmiths.ecommerce.ui.main.cart.CartScreen
 import com.theappsmiths.ecommerce.ui.main.category.CategoryScreen
+import com.theappsmiths.ecommerce.ui.main.category.CategoryViewModel
 import com.theappsmiths.ecommerce.ui.main.favorite.FavoriteScreen
 import com.theappsmiths.ecommerce.ui.main.home.HomeScreenRoute
 import com.theappsmiths.ecommerce.ui.main.profile.ProfileScreen
@@ -119,14 +120,14 @@ fun MainContainerScreen(modifier: Modifier = Modifier) {
                         CompositionLocalProvider(LocalAnimatedVisibilityScope provides this) {
                             HomeScreenRoute(
                                 modifier = Modifier.padding(contentPadding),
-                                onCategoryClick = { id ->
-                                    navController.navigate(Route.Category)
+                                onCategoryClick = { categoryId ->
+                                    navController.navigateToTopLevel(Route.Category(selectedCategory = categoryId))
                                 },
                                 onProductClick = { id ->
                                     navController.navigate(Route.ProductDetails(id))
                                 },
                                 onViewAllCategories = {
-                                    navController.navigateToTopLevel(Route.Category)
+                                    navController.navigateToTopLevel(Route.Category(selectedCategory = null))
                                 },
                                 onViewAllTopSelling = {
                                     navController.navigate(Route.ProductList(ProductListType.TOP_SELLING.toString()))
@@ -134,8 +135,18 @@ fun MainContainerScreen(modifier: Modifier = Modifier) {
                             )
                         }
                     }
-                    composable<Route.Category> {
-                        CategoryScreen(modifier = Modifier.padding(contentPadding))
+                    composable<Route.Category> { backStackEntry ->
+                        val categoryId = backStackEntry.toRoute<Route.Category>().selectedCategory
+                        val categoryViewModel: CategoryViewModel = koinViewModel {
+                            parametersOf(categoryId)
+                        }
+                        CategoryScreen(
+                            modifier = Modifier.padding(contentPadding),
+                            viewModel = categoryViewModel,
+                            onSubCategoryClick = {
+                                //TODO navigate to filtered product list based on selected category
+                            }
+                        )
                     }
                     composable<Route.Cart> {
                         CartScreen(modifier = Modifier.padding(contentPadding))
@@ -169,7 +180,7 @@ fun MainContainerScreen(modifier: Modifier = Modifier) {
                             ProductDetailsScreen(
                                 productId = productId,
                                 viewModel = productDetailsViewModel,
-                                navController = navController
+                                navController = navController,
                             )
                         }
                     }

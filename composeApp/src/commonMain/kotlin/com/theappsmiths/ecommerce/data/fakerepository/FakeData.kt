@@ -31,7 +31,27 @@ object FakeData {
 
         //sport
         SubCategory(id = "sub_s_activewear", name = "Activewear Tops", mainCategoryId = "sport"),
-        SubCategory(id = "sub_s_runshoes", name = "Running Shoes", mainCategoryId = "sport")
+        SubCategory(id = "sub_s_runshoes", name = "Running Shoes", mainCategoryId = "sport"),
+
+        //gadgets
+        SubCategory(id = "sub_g_audio", name = "Headphones & Speakers", mainCategoryId = "gadgets"),
+        SubCategory(id = "sub_g_wearables", name = "Smartwatches & Trackers", mainCategoryId = "gadgets"),
+        SubCategory(id = "sub_g_chargers", name = "Power Banks & Chargers", mainCategoryId = "gadgets"),
+
+        //home
+        SubCategory(id = "sub_h_decor", name = "Home Decor", mainCategoryId = "home"),
+        SubCategory(id = "sub_h_living", name = "Living Room Furniture", mainCategoryId = "home"),
+        SubCategory(id = "sub_h_kitchen", name = "Kitchenware", mainCategoryId = "home"),
+
+        //toys
+        SubCategory(id = "sub_t_blocks", name = "Building Blocks", mainCategoryId = "toys"),
+        SubCategory(id = "sub_t_action", name = "Action Figures & Dolls", mainCategoryId = "toys"),
+        SubCategory(id = "sub_t_games", name = "Board Games & Puzzles", mainCategoryId = "toys"),
+
+        //outdoor
+        SubCategory(id = "sub_o_camping", name = "Camping Gear", mainCategoryId = "outdoor"),
+        SubCategory(id = "sub_o_sports", name = "Team Sports Equipment", mainCategoryId = "outdoor"),
+        SubCategory(id = "sub_o_hydration", name = "Water Bottles & Flasks", mainCategoryId = "outdoor")
     )
 
     val fakeCategories: List<MainCategory> = listOf(
@@ -39,35 +59,49 @@ object FakeData {
             id = "women",
             name = "Women",
             imageUrl = "https://picsum.photos/id/65/200/200",
-            subCategories = allSubCategories.filter { it.mainCategoryId == "women" }
+            subCategories = allSubCategories.filter { it.mainCategoryId == "women" },
         ),
         MainCategory(
             id = "men",
             name = "Men",
             imageUrl = "https://picsum.photos/id/447/200/200",
-            subCategories = allSubCategories.filter { it.mainCategoryId == "men" }
+            subCategories = allSubCategories.filter { it.mainCategoryId == "men" },
         ),
         MainCategory(
             id = "beauty",
             name = "Beauty",
             imageUrl = "https://picsum.photos/id/21/200/200",
-            subCategories = allSubCategories.filter { it.mainCategoryId == "beauty" }
+            subCategories = allSubCategories.filter { it.mainCategoryId == "beauty" },
         ),
         MainCategory(
             id = "sport",
             name = "Sport",
             imageUrl = "https://picsum.photos/id/157/200/200",
-            subCategories = allSubCategories.filter { it.mainCategoryId == "sport" }
+            subCategories = allSubCategories.filter { it.mainCategoryId == "sport" },
         ),
         MainCategory(
             id = "gadgets",
             name = "Gadgets",
             imageUrl = "https://picsum.photos/id/0/200/200",
+            subCategories = allSubCategories.filter { it.mainCategoryId == "gadgets" },
         ),
         MainCategory(
             id = "home",
             name = "Furniture & Home",
             imageUrl = "https://picsum.photos/id/42/200/200",
+            subCategories = allSubCategories.filter { it.mainCategoryId == "home" },
+        ),
+        MainCategory(
+            id = "toys",
+            name = "Toys",
+            imageUrl = "https://picsum.photos/id/96/200/200",
+            subCategories = allSubCategories.filter { it.mainCategoryId == "toys" },
+        ),
+        MainCategory(
+            id = "outdoor",
+            name = "Outdoor & Leisure",
+            imageUrl = "https://picsum.photos/id/177/200/200",
+            subCategories = allSubCategories.filter { it.mainCategoryId == "outdoor" },
         ),
     )
 
