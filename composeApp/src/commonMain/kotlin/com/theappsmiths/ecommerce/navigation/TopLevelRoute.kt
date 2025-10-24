@@ -14,7 +14,7 @@ enum class TopLevelRoute(
     val icon: ImageVector,
 ) {
     HOME(route = Route.Home, label = "Home", icon = Icons.Default.Home),
-    CATEGORY(route = Route.Category, label = "Category", icon = Icons.Default.Category),
+    CATEGORY(route = Route.Category(), label = "Category", icon = Icons.Default.Category),
     CART(route = Route.Cart, label = "Cart", icon = Icons.Default.ShoppingCart),
     FAVORITE(route = Route.Favorite, label = "Favorite", icon = Icons.Default.Favorite),
     PROFILE(route = Route.Profile, label = "Me", icon = Icons.Default.Person)

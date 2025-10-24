@@ -43,7 +43,9 @@ val productModule = module {
         ProductDetailsViewModel(productId = id, productRepository = get())
     }
 
-    viewModel { CategoryViewModel(categoryRepository = get()) }
+    viewModel { (id: String?) ->
+        CategoryViewModel(selectedCategoryId = id, categoryRepository = get())
+    }
 }
 
 val fakeDataModule = module {
