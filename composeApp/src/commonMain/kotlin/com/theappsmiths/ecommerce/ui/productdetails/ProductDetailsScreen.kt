@@ -70,6 +70,7 @@ fun ProductDetailsScreen(
     productId: Int,
     viewModel: ProductDetailsViewModel,
     navController: NavController,
+    onCartClick: () -> Unit,
 ) {
     val sharedTransitionScope = LocalSharedTransitionScope.current
         ?: throw IllegalStateException("No SharedElementScope found")
@@ -93,7 +94,7 @@ fun ProductDetailsScreen(
                 ProductDetailsAppBar(
                     canNavigateBack = navController.previousBackStackEntry != null,
                     onNavigateUp = { navController.navigateUp() },
-                    onCartClick = {},
+                    onCartClick = onCartClick,
                 )
             },
             bottomBar = {

@@ -1,16 +1,19 @@
 package com.theappsmiths.ecommerce.di
 
 import com.theappsmiths.ecommerce.BuildKonfig
+import com.theappsmiths.ecommerce.data.fakerepository.FakeCartRepositoryImpl
 import com.theappsmiths.ecommerce.data.fakerepository.FakeCategoryRepositoryImpl
 import com.theappsmiths.ecommerce.data.fakerepository.FakeHomeRepositoryImpl
 import com.theappsmiths.ecommerce.data.fakerepository.FakeOnboardingRepositoryImpl
 import com.theappsmiths.ecommerce.data.fakerepository.FakeOtpRepositoryImpl
 import com.theappsmiths.ecommerce.data.fakerepository.FakeProductRepositoryImpl
+import com.theappsmiths.ecommerce.data.repository.CartRepositoryImpl
 import com.theappsmiths.ecommerce.data.repository.CategoryRepositoryImpl
 import com.theappsmiths.ecommerce.data.repository.HomeRepositoryIml
 import com.theappsmiths.ecommerce.data.repository.OnboardingRepositoryImpl
 import com.theappsmiths.ecommerce.data.repository.OtpRepositoryImpl
 import com.theappsmiths.ecommerce.data.repository.ProductRepositoryImpl
+import com.theappsmiths.ecommerce.domain.repository.CartRepository
 import com.theappsmiths.ecommerce.domain.repository.CategoryRepository
 import com.theappsmiths.ecommerce.domain.repository.HomeRepository
 import com.theappsmiths.ecommerce.domain.repository.OnboardingRepository
@@ -18,6 +21,7 @@ import com.theappsmiths.ecommerce.domain.repository.OtpRepository
 import com.theappsmiths.ecommerce.domain.repository.ProductRepository
 import com.theappsmiths.ecommerce.ui.emailverification.verifyotp.VerifyOtpViewModel
 import com.theappsmiths.ecommerce.ui.login.LoginViewModel
+import com.theappsmiths.ecommerce.ui.main.cart.CartViewModel
 import com.theappsmiths.ecommerce.ui.main.category.CategoryViewModel
 import com.theappsmiths.ecommerce.ui.main.home.HomeViewModel
 import com.theappsmiths.ecommerce.ui.productdetails.ProductDetailsViewModel
@@ -46,6 +50,8 @@ val productModule = module {
     viewModel { (id: String?) ->
         CategoryViewModel(selectedCategoryId = id, categoryRepository = get())
     }
+
+    viewModel { CartViewModel(cartRepository = get()) }
 }
 
 val fakeDataModule = module {
@@ -54,6 +60,7 @@ val fakeDataModule = module {
     factory<OtpRepository> { FakeOtpRepositoryImpl() }
     factory<HomeRepository> { FakeHomeRepositoryImpl() }
     factory<CategoryRepository> { FakeCategoryRepositoryImpl() }
+    factory<CartRepository> { FakeCartRepositoryImpl() }
 }
 
 val prodDataModule = module {
@@ -62,6 +69,7 @@ val prodDataModule = module {
     factory<OtpRepository> { OtpRepositoryImpl() }
     factory<HomeRepository> { HomeRepositoryIml() }
     factory<CategoryRepository> { CategoryRepositoryImpl() }
+    factory<CartRepository> { CartRepositoryImpl() }
 }
 
 val dataModule = when (BuildKonfig.ENV) {
