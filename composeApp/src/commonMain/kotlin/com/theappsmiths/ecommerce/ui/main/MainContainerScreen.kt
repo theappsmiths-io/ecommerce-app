@@ -72,10 +72,10 @@ fun MainContainerScreen(modifier: Modifier = Modifier) {
         modifier = modifier,
         topBar = {
             val navBackStackEntry by navController.currentBackStackEntryAsState()
-            val currentDestination = navBackStackEntry?.destination
+            val currentDestination = navBackStackEntry?.destination?.toTopLevelRoute()
 
             AnimatedVisibility(
-                visible = isTopLevelScreen(currentDestination),
+                visible = currentDestination?.showAppBar == true,
                 enter = fadeIn() + slideInVertically(initialOffsetY = { -it }),
                 exit = fadeOut() + slideOutVertically(targetOffsetY = { -it }),
             ) {
@@ -219,6 +219,12 @@ fun MainNavigationBar(navController: NavHostController, currentDestination: NavD
 private fun isTopLevelScreen(currentDestination: NavDestination?): Boolean {
     val topLevelRoutes = TopLevelRoute.entries.map { it.route::class }
     return currentDestination != null && topLevelRoutes.any { currentDestination.hasRoute(it) }
+}
+
+private fun NavDestination.toTopLevelRoute(): TopLevelRoute? {
+    return TopLevelRoute.entries.find { topLevelRoute ->
+        this.hierarchy.any { it.hasRoute(topLevelRoute.route::class) }
+    }
 }
 
 fun NavHostController.navigateToTopLevel(route: Route) {
