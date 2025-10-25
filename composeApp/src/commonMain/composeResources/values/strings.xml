@@ -4,6 +4,7 @@
     <string name="title_product_listing">Products</string>
     <string name="title_top_selling">Top Selling</string>
     <string name="title_for_you">For You</string>
+    <string name="title_cart">Cart (%1$s)</string>
 
     <string name="product_not_found">Product not found</string>
     <string name="header_product_details">Product Details</string>

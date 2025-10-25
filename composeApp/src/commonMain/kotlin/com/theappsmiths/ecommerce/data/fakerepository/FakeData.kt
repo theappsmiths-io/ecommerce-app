@@ -1,5 +1,6 @@
 package com.theappsmiths.ecommerce.data.fakerepository
 
+import com.theappsmiths.ecommerce.domain.model.CartItem
 import com.theappsmiths.ecommerce.domain.model.MainCategory
 import com.theappsmiths.ecommerce.domain.model.Product
 import com.theappsmiths.ecommerce.domain.model.Rating
@@ -102,6 +103,54 @@ object FakeData {
             name = "Outdoor & Leisure",
             imageUrl = "https://picsum.photos/id/177/200/200",
             subCategories = allSubCategories.filter { it.mainCategoryId == "outdoor" },
+        ),
+    )
+
+    val fakeCartItems: List<CartItem> = listOf(
+        CartItem(
+            productId = 14,
+            name = "Samsung 49-Inch CHG90 144Hz Curved Gaming Monitor (LC49HG90DMNXZA) – Super Ultrawide Screen QLED",
+            price = 999.99,
+            quantity = 1,
+            imageUrl = "https://fakestoreapi.com/img/81Zt42ioCgL._AC_SX679_t.png"
+        ),
+        CartItem(
+            productId = 12,
+            name = "WD 4TB Gaming Drive Works with Playstation 4 Portable External Hard Drive",
+            price = 114.00,
+            quantity = 2,
+            attributes = mapOf("Size" to "4TB"),
+            imageUrl = "https://fakestoreapi.com/img/61mtL65D4cL._AC_SX679_t.png"
+        ),
+        CartItem(
+            productId = 2,
+            name = "Mens Casual Premium Slim Fit T-Shirts",
+            price = 22.95,
+            quantity = 1,
+            attributes = mapOf("Size" to "M"),
+            imageUrl = "https://fakestoreapi.com/img/71-3HjGNDUL._AC_SY879._SX._UX._SY._UY_t.png"
+        ),
+        CartItem(
+            productId = 4,
+            name = "Mens Casual Slim Fit",
+            price = 75.00,
+            quantity = 1,
+            attributes = mapOf("Size" to "M", "Color" to "Navy"),
+            imageUrl = "https://fakestoreapi.com/img/71YXzeOuslL._AC_UY879_t.png"
+        ),
+        CartItem(
+            productId = 7,
+            name = "White Gold Plated Princess",
+            price = 89.99,
+            quantity = 1,
+            imageUrl = "https://fakestoreapi.com/img/71YAIFU48IL._AC_UL640_QL65_ML3_t.png"
+        ),
+        CartItem(
+            productId = 8,
+            name = "Pierced Owl Rose Gold Plated Stainless Steel Double",
+            price = 89.99,
+            quantity = 1,
+            imageUrl = "https://fakestoreapi.com/img/51UDEzMJVpL._AC_UL640_QL65_ML3_t.png"
         ),
     )
 

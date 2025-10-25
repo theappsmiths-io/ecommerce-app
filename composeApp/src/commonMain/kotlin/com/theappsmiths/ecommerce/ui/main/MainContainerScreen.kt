@@ -110,6 +110,7 @@ fun MainContainerScreen(modifier: Modifier = Modifier) {
             }
         }
     ) { contentPadding ->
+        //content padding is being applied differently for each screen due to different screen requirements
         SharedTransitionLayout {
             CompositionLocalProvider(LocalSharedTransitionScope provides this) {
                 NavHost(
@@ -145,11 +146,15 @@ fun MainContainerScreen(modifier: Modifier = Modifier) {
                             viewModel = categoryViewModel,
                             onSubCategoryClick = {
                                 //TODO navigate to filtered product list based on selected category
+                                navController.navigate(Route.ProductList(ProductListType.ALL.toString()))
                             }
                         )
                     }
                     composable<Route.Cart> {
-                        CartScreen(modifier = Modifier.padding(contentPadding))
+                        CartScreen(
+                            modifier = Modifier.padding(bottom = contentPadding.calculateBottomPadding()),
+                            navController = navController,
+                        )
                     }
                     composable<Route.Favorite> {
                         FavoriteScreen(modifier = Modifier.padding(contentPadding))
@@ -159,7 +164,8 @@ fun MainContainerScreen(modifier: Modifier = Modifier) {
                     }
                     composable<Route.ProductList> { backStackEntry ->
                         val productListRoute = backStackEntry.toRoute<Route.ProductList>()
-                        val productListType = ProductListType.valueOf(productListRoute.productListType)
+                        val productListType =
+                            ProductListType.valueOf(productListRoute.productListType)
 
                         CompositionLocalProvider(LocalAnimatedVisibilityScope provides this) {
                             ProductListScreen(
@@ -181,6 +187,7 @@ fun MainContainerScreen(modifier: Modifier = Modifier) {
                                 productId = productId,
                                 viewModel = productDetailsViewModel,
                                 navController = navController,
+                                onCartClick = { navController.navigate(Route.Cart) }
                             )
                         }
                     }
