@@ -18,6 +18,8 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Remove
+import androidx.compose.material.icons.outlined.DeleteOutline
+import androidx.compose.material.icons.outlined.FavoriteBorder
 import androidx.compose.material3.Checkbox
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
@@ -38,6 +40,8 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavController
 import coil3.compose.AsyncImage
+import com.theappsmiths.designsystem.ui.item.SwipeableItemWithActions
+import com.theappsmiths.designsystem.ui.loadingindicator.FullscreenLoadingIndicator
 import com.theappsmiths.ecommerce.domain.model.CartItem
 import com.theappsmiths.ecommerce.util.formatToUsd
 import ecommerce.composeapp.generated.resources.Res
@@ -62,10 +66,14 @@ fun CartScreen(
             )
         }
     ) { contentPadding ->
-        CartScreen(
-            modifier = modifier.padding(top = contentPadding.calculateTopPadding()),
-            cartItems = uiState.cartItems,
-        )
+        if (uiState.isLoading) {
+            FullscreenLoadingIndicator()
+        } else {
+            CartScreen(
+                modifier = modifier.padding(top = contentPadding.calculateTopPadding()),
+                cartItems = uiState.cartItems,
+            )
+        }
     }
 }
 
@@ -81,11 +89,31 @@ fun CartScreen(modifier: Modifier = Modifier, cartItems: List<CartItem>) {
             key = { cartItem -> cartItem.productId }
         ) { cartItem ->
             Column {
-                CartListItem(
-                    modifier = Modifier.padding(vertical = 16.dp),
-                    cartItem = cartItem,
-                    onCheckedChange = {},
-                )
+                SwipeableItemWithActions(
+                    actions = {
+                        IconButton(onClick = {}, modifier = Modifier.size(32.dp)) {
+                            Icon(
+                                imageVector = Icons.Outlined.FavoriteBorder,
+                                contentDescription = "Favorite",
+                                tint = MaterialTheme.colorScheme.onSurface,
+                            )
+                        }
+                        IconButton(onClick = {}, modifier = Modifier.size(32.dp)) {
+                            Icon(
+                                imageVector = Icons.Outlined.DeleteOutline,
+                                contentDescription = "Favorite",
+                                tint = MaterialTheme.colorScheme.onSurface,
+                            )
+                        }
+                    }
+                ) {
+                    CartListItem(
+                        modifier = Modifier.padding(vertical = 16.dp),
+                        cartItem = cartItem,
+                        onCheckedChange = {},
+                    )
+                }
+
                 HorizontalDivider(
                     thickness = 1.dp,
                     color = MaterialTheme.colorScheme.outline
@@ -121,51 +149,55 @@ fun CartListItem(
         )
         Spacer(modifier = Modifier.width(16.dp))
 
-        //Product details
-        Column(
-            modifier = Modifier.weight(1f),
-            verticalArrangement = Arrangement.spacedBy(8.dp),
-        ) {
+        CartItemDetails(modifier = Modifier.weight(1f), cartItem = cartItem)
+    }
+}
+
+@Composable
+fun CartItemDetails(modifier: Modifier = Modifier, cartItem: CartItem) {
+    Column(
+        modifier = modifier,
+        verticalArrangement = Arrangement.spacedBy(8.dp),
+    ) {
+        Text(
+            text = cartItem.name,
+            style = MaterialTheme.typography.labelLarge,
+            maxLines = 2,
+            overflow = TextOverflow.Ellipsis,
+        )
+
+        QuantitySelector()
+
+        Row(verticalAlignment = Alignment.CenterVertically) {
             Text(
-                text = cartItem.name,
+                text = cartItem.price.formatToUsd(),
                 style = MaterialTheme.typography.labelLarge,
-                maxLines = 2,
-                overflow = TextOverflow.Ellipsis,
+                fontWeight = FontWeight.Bold,
             )
-
-            QuantitySelector()
-
-            Row(verticalAlignment = Alignment.CenterVertically) {
+            Spacer(modifier = Modifier.width(8.dp))
+            //TODO Original price
+            Text(
+                text = "₱5,350.00",
+                style = MaterialTheme.typography.labelSmall.copy(
+                    textDecoration = TextDecoration.LineThrough,
+                ),
+            )
+            Spacer(modifier = Modifier.width(8.dp))
+            //TODO Discount percentage
+            Box(
+                modifier = Modifier
+                    .background(
+                        color = MaterialTheme.colorScheme.secondary,
+                        shape = RoundedCornerShape(4.dp),
+                    )
+                    .padding(horizontal = 6.dp, vertical = 2.dp),
+            ) {
                 Text(
-                    text = cartItem.price.formatToUsd(),
-                    style = MaterialTheme.typography.labelLarge,
+                    text = "-30%",
+                    color = MaterialTheme.colorScheme.onSecondary,
+                    style = MaterialTheme.typography.labelSmall,
                     fontWeight = FontWeight.Bold,
                 )
-                Spacer(modifier = Modifier.width(8.dp))
-                //TODO Original price
-                Text(
-                    text = "₱5,350.00",
-                    style = MaterialTheme.typography.labelSmall.copy(
-                        textDecoration = TextDecoration.LineThrough,
-                    ),
-                )
-                Spacer(modifier = Modifier.width(8.dp))
-                //TODO Discount percentage
-                Box(
-                    modifier = Modifier
-                        .background(
-                            color = MaterialTheme.colorScheme.secondary,
-                            shape = RoundedCornerShape(4.dp),
-                        )
-                        .padding(horizontal = 6.dp, vertical = 2.dp),
-                ) {
-                    Text(
-                        text = "-30%",
-                        color = MaterialTheme.colorScheme.onSecondary,
-                        style = MaterialTheme.typography.labelSmall,
-                        fontWeight = FontWeight.Bold,
-                    )
-                }
             }
         }
     }

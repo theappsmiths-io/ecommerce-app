@@ -148,7 +148,7 @@ fun ProductCard(
                     modifier = Modifier
                         .fillMaxWidth()
                         .background(MaterialTheme.colorScheme.surfaceContainer)
-                        .height(160.dp),
+                        .height(148.dp),
                     contentScale = ContentScale.Fit,
                 )
             },

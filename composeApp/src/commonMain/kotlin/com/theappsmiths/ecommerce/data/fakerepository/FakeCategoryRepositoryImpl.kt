@@ -6,7 +6,7 @@ import kotlinx.coroutines.delay
 
 class FakeCategoryRepositoryImpl : CategoryRepository {
     override suspend fun getCategories(): List<MainCategory> {
-        delay(1000)
+        delay(700)
         return FakeData.fakeCategories
     }
 }
