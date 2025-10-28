@@ -283,6 +283,17 @@ object FakeData {
         ),
     )
 
+    val fakeFavorites = listOf(
+        fakeProductList[1],
+        fakeProductList[3],
+        fakeProductList[5],
+        fakeProductList[6],
+        fakeProductList[8],
+        fakeProductList[9],
+        fakeProductList[10],
+        fakeProductList[12],
+    )
+
     val fakeTopSellingProducts = fakeProductList.subList(0, 5)
 
     val fakeForYouProducts = fakeProductList.subList(6, fakeProductList.size)

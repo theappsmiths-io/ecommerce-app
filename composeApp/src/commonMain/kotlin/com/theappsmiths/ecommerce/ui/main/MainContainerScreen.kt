@@ -48,7 +48,7 @@ import com.theappsmiths.ecommerce.navigation.TopLevelRoute
 import com.theappsmiths.ecommerce.ui.main.cart.CartScreen
 import com.theappsmiths.ecommerce.ui.main.category.CategoryScreen
 import com.theappsmiths.ecommerce.ui.main.category.CategoryViewModel
-import com.theappsmiths.ecommerce.ui.main.favorite.FavoriteScreen
+import com.theappsmiths.ecommerce.ui.main.favorites.FavoriteScreen
 import com.theappsmiths.ecommerce.ui.main.home.HomeScreenRoute
 import com.theappsmiths.ecommerce.ui.main.profile.ProfileScreen
 import com.theappsmiths.ecommerce.ui.productdetails.ProductDetailsScreen
@@ -157,7 +157,12 @@ fun MainContainerScreen(modifier: Modifier = Modifier) {
                         )
                     }
                     composable<Route.Favorite> {
-                        FavoriteScreen(modifier = Modifier.padding(contentPadding))
+                        CompositionLocalProvider(LocalAnimatedVisibilityScope provides this) {
+                            FavoriteScreen(
+                                modifier = Modifier.padding(bottom = contentPadding.calculateBottomPadding()),
+                                navController = navController,
+                            )
+                        }
                     }
                     composable<Route.Profile> {
                         ProfileScreen(modifier = Modifier.padding(contentPadding))
